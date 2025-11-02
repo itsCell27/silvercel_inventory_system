@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, Edit, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 
 const initialCategories = [
   { id: 1, name: "Bracelets" },
@@ -43,7 +44,7 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
 
   const handleSubmit = () => {
     if (!categoryName.trim()) {
-      alert("Please enter a category name")
+      toast.error("Please enter a category name")
       return
     }
 
@@ -155,7 +156,7 @@ export default function Categories() {
 
   const openDeleteDialog = () => {
     if (selectedCategories.length === 0) {
-      alert("Please select at least one category to delete")
+      toast.error("Please select at least one category to delete")
       return
     }
     setShowDeleteDialog(true)

@@ -11,6 +11,7 @@ import Settings from "@/pages/Settings";
 import ChangeEmail from "@/pages/ChangeEmail";
 import Products from "@/pages/Products";
 import Categories from "@/pages/Categories";
+import SalesOrders from "./pages/SalesOrders";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
             {
                 path: "categories",
                 element: <Categories />
+            },
+            {
+                path: "sales_orders",
+                element: <SalesOrders />
             },
             // Add more protected routes here
         ]

@@ -11,6 +11,7 @@ import {
   X,
   ChevronLeft,
   Tags,
+  ShoppingCart,
 } from "lucide-react";
 
 export default function AppSidebar() {
@@ -25,6 +26,7 @@ export default function AppSidebar() {
     { title: "Dashboard", icon: CircleGauge, path: "/app/dashboard" },
     { title: "Products", icon: Package, path: "/app/products" },
     { title: "Categories", icon: Tags, path: "/app/categories" },
+    { title: "Sales/Orders", icon: ShoppingCart, path: "/app/sales_orders" },
     { title: "Settings", icon: Settings, path: "/app/settings" },
 
   ];
