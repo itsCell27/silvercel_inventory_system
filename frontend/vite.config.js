@@ -5,19 +5,20 @@ import { defineConfig } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    port: 5173,
+    open: true,
+  },
   build: {
     // Ensure production builds don't use eval
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      }
-    }
+    outDir: "dist",
+    minify: "esbuild", // Use built-in esbuild instead of terser
   }
 })
