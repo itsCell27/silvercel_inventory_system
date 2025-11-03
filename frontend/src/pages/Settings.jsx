@@ -179,12 +179,14 @@ export default function Settings() {
                 <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
                   <DialogTrigger asChild>
                     <Button variant="outline" onClick={() => {
-                      // Reset all states when opening dialog
-                      setVerificationCode('');
-                      setNewEmail('');
-                      setConfirmNewEmail('');
-                      setCodeSent(false);
-                    }}>
+                        // Reset all states when opening dialog
+                        setVerificationCode('');
+                        setNewEmail('');
+                        setConfirmNewEmail('');
+                        setCodeSent(false);
+                      }}
+                      className="sm:min-w-40"
+                    >
                       <Mail className="h-4 w-4 sm:hidden" />
                       <span className='sm:block hidden'>Change Email</span>
                     </Button>
@@ -299,7 +301,7 @@ export default function Settings() {
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline">
+                    <Button variant="outline" className="sm:min-w-40">
                       <UserRoundPen className="h-4 w-4 sm:hidden" />
                       <span className='sm:block hidden'>Change Username</span>
                     </Button>
@@ -362,7 +364,7 @@ export default function Settings() {
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline">
+                    <Button variant="outline" className="sm:min-w-40">
                       <LockKeyholeOpen className="h-4 w-4 sm:hidden" />
                       <span className='sm:block hidden'>Change Password</span>
                     </Button>
