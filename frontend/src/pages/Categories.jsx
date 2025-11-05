@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,43 +15,35 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Plus, Edit, Trash2 } from "lucide-react"
-import { toast } from "sonner"
-
-const initialCategories = [
-  { id: 1, name: "Bracelets" },
-  { id: 2, name: "Rings" },
-  { id: 3, name: "Earrings" },
-  { id: 4, name: "Necklaces" },
-  { id: 5, name: "Charms" },
-]
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Plus, Edit, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
-  const [categoryName, setCategoryName] = useState("")
+  const [categoryName, setCategoryName] = useState("");
 
   useEffect(() => {
     if (editCategory && isOpen) {
-      setCategoryName(editCategory.name)
+      setCategoryName(editCategory.name);
     } else if (!isOpen) {
-      setCategoryName("")
+      setCategoryName("");
     }
-  }, [editCategory, isOpen])
+  },   [editCategory, isOpen]);
 
   const handleSubmit = () => {
     if (!categoryName.trim()) {
-      toast.error("Please enter a category name")
-      return
+      toast.error("Please enter a category name");
+      return;
     }
 
-    onSave(categoryName.trim())
-    setCategoryName("")
-    onOpenChange(false)
-  }
+    onSave(categoryName.trim());
+    setCategoryName("");
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -59,8 +51,8 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
         <DialogHeader>
           <DialogTitle>{editCategory ? "Edit Category" : "Add Category"}</DialogTitle>
           <DialogDescription>
-            {editCategory 
-              ? "Update the category name below." 
+            {editCategory
+              ? "Update the category name below."
               : "Enter a name for the new category."}
           </DialogDescription>
         </DialogHeader>
@@ -74,7 +66,7 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
               placeholder="Enter category name"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleSubmit()
+                  handleSubmit();
                 }
               }}
             />
@@ -84,10 +76,10 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
           <Button onClick={handleSubmit} className="flex-1">
             {editCategory ? "Update" : "Add"} Category
           </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => onOpenChange(false)} 
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
             className="flex-1"
           >
             Cancel
@@ -95,72 +87,125 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default function Categories() {
-  const [categories, setCategories] = useState(initialCategories)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editCategory, setEditCategory] = useState(null)
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [categories, setCategories] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editCategory, setEditCategory] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const fetchCategories = () => {
+    fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error("Fetched data is not an array:", data);
+          setCategories([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+        toast.error(`Error fetching categories: ${error.message}`);
+        setCategories([]);
+      });
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleAddCategory = (name) => {
-    const newCategory = {
-      id: Math.max(...categories.map((c) => c.id), 0) + 1,
-      name: name,
-    }
-    setCategories([...categories, newCategory])
-  }
+    fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        toast.success("Category added successfully");
+        fetchCategories();
+      });
+  };
 
   const handleEditCategory = (name) => {
     if (editCategory) {
-      setCategories(
-        categories.map((c) => (c.id === editCategory.id ? { ...c, name } : c))
-      )
-      setEditCategory(null)
+      fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: editCategory.id, name }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          toast.success("Category updated successfully");
+          fetchCategories();
+          setEditCategory(null);
+        });
     }
-  }
+  };
 
   const handleDeleteSelected = () => {
-    if (selectedCategories.length === 0) return
-    
-    setCategories(categories.filter((c) => !selectedCategories.includes(c.id)))
-    setSelectedCategories([])
-    setShowDeleteDialog(false)
-  }
+    if (selectedCategories.length === 0) return;
+
+    const deletePromises = selectedCategories.map(id =>
+      fetch(`http://localhost/silvercel_inventory_system/backend/api/categories.php?id=${id}`, {
+        method: "DELETE",
+      })
+    );
+
+    Promise.all(deletePromises)
+      .then(() => {
+        toast.success(`${selectedCategories.length} categor(y/ies) deleted successfully`);
+        fetchCategories();
+        setSelectedCategories([]);
+        setShowDeleteDialog(false);
+      });
+  };
 
   const openEditDialog = (category) => {
-    setEditCategory(category)
-    setIsDialogOpen(true)
-  }
+    setEditCategory(category);
+    setIsDialogOpen(true);
+  };
 
   const openAddDialog = () => {
-    setEditCategory(null)
-    setIsDialogOpen(true)
-  }
+    setEditCategory(null);
+    setIsDialogOpen(true);
+  };
 
   const toggleCategorySelection = (id) => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
-    )
-  }
+    );
+  };
 
   const toggleSelectAll = () => {
     if (selectedCategories.length === categories.length) {
-      setSelectedCategories([])
+      setSelectedCategories([]);
     } else {
-      setSelectedCategories(categories.map((c) => c.id))
+      setSelectedCategories(categories.map((c) => c.id));
     }
-  }
+  };
 
   const openDeleteDialog = () => {
     if (selectedCategories.length === 0) {
-      toast.error("Please select at least one category to delete")
-      return
+      toast.error("Please select at least one category to delete");
+      return;
     }
-    setShowDeleteDialog(true)
-  }
+    setShowDeleteDialog(true);
+  };
 
   return (
     <div className="w-full flex flex-col gap-6 mt-2 sm:mt-0">
@@ -233,9 +278,8 @@ export default function Categories() {
                       onClick={() => openEditDialog(category)}
                       className="p-3"
                     >
-                        <span className="hidden sm:block">Edit</span>
-                        <Edit className="h-4 w-4" />
-                      
+                      <span className="hidden sm:block">Edit</span>
+                      <Edit className="h-4 w-4" />
                     </Button>
                   </td>
                 </tr>
@@ -276,5 +320,5 @@ export default function Categories() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,53 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
-import { ShoppingCart, Package, Search } from "lucide-react"
+import { ShoppingCart, Package, Search, Pencil, Trash2, Calendar as CalendarIcon } from "lucide-react"
 import { toast } from "sonner"
 
-// Mock data for products
-const products = [
-  { id: 1, name: "Pandora Moments Snake Chain Bracelet", price: 75.0, quantity: 25, category: "Bracelets" },
-  { id: 2, name: "Sparkling Heart Halo Ring", price: 65.0, quantity: 40, category: "Rings" },
-  { id: 3, name: "Timeless Elegance Earrings", price: 85.0, quantity: 18, category: "Earrings" },
-  { id: 4, name: "Pandora Signature Logo Pendant Necklace", price: 99.0, quantity: 12, category: "Necklaces" },
-  { id: 5, name: "Rose Gold Charm with Pink Crystal", price: 55.0, quantity: 60, category: "Charms" },
-  { id: 6, name: "Pandora ME Link Chain Necklace", price: 120.0, quantity: 10, category: "Necklaces" },
-]
-
-// Mock data for sales orders
-const initialOrders = [
-  {
-    id: 1,
-    productName: "Pandora Moments Snake Chain Bracelet",
-    quantitySold: 3,
-    totalPrice: 225.0,
-    orderDate: "2025-11-01 14:30:00",
-  },
-  {
-    id: 2,
-    productName: "Sparkling Heart Halo Ring",
-    quantitySold: 2,
-    totalPrice: 130.0,
-    orderDate: "2025-11-02 10:15:00",
-  },
-  {
-    id: 3,
-    productName: "Timeless Elegance Earrings",
-    quantitySold: 1,
-    totalPrice: 85.0,
-    orderDate: "2025-11-02 16:45:00",
-  },
-  {
-    id: 4,
-    productName: "Rose Gold Charm with Pink Crystal",
-    quantitySold: 5,
-    totalPrice: 275.0,
-    orderDate: "2025-11-03 09:20:00",
-  },
-]
-
-function ProductSelectionDialog({ onSelectProduct, selectedProduct }) {
+function ProductSelectionDialog({ onSelectProduct, selectedProduct, products }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [isOpen, setIsOpen] = useState(false)
 
@@ -131,7 +94,7 @@ function ProductSelectionDialog({ onSelectProduct, selectedProduct }) {
                       </p>
                       <div className="flex items-center gap-3 mt-2">
                         <span className="text-lg font-bold text-primary">
-                          ₱{product.price.toFixed(2)}
+                          ₱{parseFloat(product.price).toFixed(2)}
                         </span>
                         <Badge
                           variant={product.quantity > 10 ? "secondary" : "destructive"}
@@ -154,9 +117,25 @@ function ProductSelectionDialog({ onSelectProduct, selectedProduct }) {
 }
 
 export default function SalesOrders() {
-  const [orders, setOrders] = useState(initialOrders)
+  const [orders, setOrders] = useState([])
+  const [products, setProducts] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [quantitySold, setQuantitySold] = useState("")
+  const [orderDate, setOrderDate] = useState(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState(null)
+
+  useEffect(() => {
+    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php')
+        .then(response => response.json())
+        .then(data => setOrders(data))
+        .catch(error => console.error("Error fetching sales orders:", error));
+
+    fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+        .then(response => response.json())
+        .then(data => setProducts(data))
+        .catch(error => console.error("Error fetching products:", error));
+  }, []);
 
   const handleSubmit = () => {
     if (!selectedProduct || !quantitySold) {
@@ -175,34 +154,95 @@ export default function SalesOrders() {
       return
     }
 
-    const totalPrice = selectedProduct.price * quantity
+    const totalPrice = parseFloat(selectedProduct.price) * quantity
     const newOrder = {
-      id: Math.max(...orders.map((o) => o.id), 0) + 1,
-      productName: selectedProduct.name,
-      quantitySold: quantity,
-      totalPrice: totalPrice,
-      orderDate: new Date().toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      }),
+      product_name: selectedProduct.name,
+      quantity_sold: quantity,
+      total_price: totalPrice,
+      order_date: orderDate ? format(orderDate, "yyyy-MM-dd HH:mm:ss") : new Date().toISOString().slice(0, 19).replace('T', ' '),
     }
 
-    setOrders([newOrder, ...orders])
+    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newOrder),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            setOrders([data, ...orders]);
+            toast.success("Order added successfully");
+            // Refresh products list to get updated quantity
+            fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+                .then(response => response.json())
+                .then(data => setProducts(data))
+                .catch(error => console.error("Error fetching products:", error));
+        } else {
+            toast.error(data.message || "An unknown error occurred.");
+        }
+    });
+
     setSelectedProduct(null)
     setQuantitySold("")
+    setOrderDate(null)
   }
+
+  const handleEditClick = (order) => {
+    setSelectedOrder(order)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleUpdate = () => {
+    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(selectedOrder),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setOrders(
+          orders.map((order) =>
+            order.id === selectedOrder.id ? selectedOrder : order
+          )
+        )
+        setIsEditDialogOpen(false)
+        toast.success("Order updated successfully")
+      })
+      .catch((error) => {
+        console.error("Error updating order:", error)
+        toast.error("Failed to update order")
+      })
+  }
+
+  const handleDelete = (id) => {
+    fetch(`http://localhost/silvercel_inventory_system/backend/api/sales_orders.php?id=${id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setOrders(orders.filter((order) => order.id !== id));
+        toast.success("Order deleted successfully");
+      })
+      .catch((error) => {
+        console.error("Error deleting order:", error);
+        toast.error("Failed to delete order");
+      });
+  };
 
   return (
     <div className="w-full flex flex-col gap-6 mt-2 sm:mt-0">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        {/* <ShoppingCart className="h-8 w-8 text-primary" /> */}
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">Sales/Orders</h1>
+        <Button 
+          variant="outline"
+          onClick={() => window.location.href='http://localhost/silvercel_inventory_system/backend/api/sales_report.php'}>
+          Download Report
+        </Button>
       </div>
 
       {/* Add New Order Card */}
@@ -219,6 +259,7 @@ export default function SalesOrders() {
               <ProductSelectionDialog
                 onSelectProduct={setSelectedProduct}
                 selectedProduct={selectedProduct}
+                products={products}
               />
             </div>
 
@@ -272,29 +313,40 @@ export default function SalesOrders() {
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-40">
                     Order Date
                   </th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {orders.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="h-24 text-center text-muted-foreground">
+                    <td colSpan={6} className="h-24 text-center text-muted-foreground">
                       No sales orders found
                     </td>
                   </tr>
                 ) : (
-                  orders.map((order) => (
+                  orders.map((order, index) => (
                     <tr
                       key={order.id}
                       className="border-b border-border transition-colors hover:bg-muted/50"
                     >
-                      <td className="p-4 align-middle font-medium">{order.id}</td>
-                      <td className="p-4 align-middle">{order.productName}</td>
-                      <td className="p-4 align-middle">{order.quantitySold}</td>
+                      <td className="p-4 align-middle font-medium">{orders.length - index}</td>
+                      <td className="p-4 align-middle">{order.product_name}</td>
+                      <td className="p-4 align-middle">{order.quantity_sold}</td>
                       <td className="p-4 align-middle font-semibold text-primary">
-                        ₱{order.totalPrice.toFixed(2)}
+                        ₱{parseFloat(order.total_price).toFixed(2)}
                       </td>
                       <td className="p-4 align-middle text-muted-foreground text-xs sm:text-sm">
-                        {order.orderDate}
+                        {new Date(order.order_date).toLocaleString()}
+                      </td>
+                      <td className="p-4 align-middle">
+                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(order)}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleDelete(order.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </td>
                     </tr>
                   ))
@@ -302,6 +354,75 @@ export default function SalesOrders() {
               </tbody>
             </table>
           </div>
+
+          {/* Edit Order Dialog */}
+          {selectedOrder && (
+            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit Order #{selectedOrder.id}</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="product_name" className="text-right">
+                      Product Name
+                    </Label>
+                    <Input
+                      id="product_name"
+                      value={selectedOrder.product_name}
+                      onChange={(e) =>
+                        setSelectedOrder({ ...selectedOrder, product_name: e.target.value })
+                      }
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="quantity_sold" className="text-right">
+                      Quantity
+                    </Label>
+                    <Input
+                      id="quantity_sold"
+                      type="number"
+                      value={selectedOrder.quantity_sold}
+                      onChange={(e) =>
+                        setSelectedOrder({ ...selectedOrder, quantity_sold: e.target.value })
+                      }
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="total_price" className="text-right">
+                      Total Price
+                    </Label>
+                    <Input
+                      id="total_price"
+                      type="number"
+                      value={selectedOrder.total_price}
+                      onChange={(e) =>
+                        setSelectedOrder({ ...selectedOrder, total_price: e.target.value })
+                      }
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="order_date" className="text-right">
+                      Order Date
+                    </Label>
+                    <Input
+                      id="order_date"
+                      type="datetime-local"
+                      value={selectedOrder.order_date ? new Date(selectedOrder.order_date).toISOString().slice(0, 16) : ''}
+                      onChange={(e) =>
+                        setSelectedOrder({ ...selectedOrder, order_date: e.target.value })
+                      }
+                      className="col-span-3"
+                    />
+                  </div>
+                </div>
+                <Button onClick={handleUpdate}>Save Changes</Button>
+              </DialogContent>
+            </Dialog>
+          )}
 
           {/* Summary Section */}
           {orders.length > 0 && (
@@ -313,13 +434,13 @@ export default function SalesOrders() {
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Total Sales</p>
                 <p className="text-2xl font-bold text-primary">
-                  ₱{orders.reduce((sum, order) => sum + order.totalPrice, 0).toFixed(2)}
+                  ₱{orders.reduce((sum, order) => sum + parseFloat(order.total_price), 0).toFixed(2)}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Items Sold</p>
                 <p className="text-2xl font-bold">
-                  {orders.reduce((sum, order) => sum + order.quantitySold, 0)}
+                  {orders.reduce((sum, order) => sum + parseInt(order.quantity_sold), 0)}
                 </p>
               </div>
             </div>
