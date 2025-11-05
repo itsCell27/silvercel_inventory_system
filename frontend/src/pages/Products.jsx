@@ -77,10 +77,8 @@ const initialProducts = [
   },
 ];
 
-const categories = ["Bracelets", "Rings", "Earrings", "Necklaces", "Charms"];
-
 // SearchBar Component
-function SearchBar({ searchQuery, onSearchChange, category, onCategoryChange }) {
+function SearchBar({ searchQuery, onSearchChange, category, onCategoryChange, categories }) {
   return (
     <div className="flex flex-col sm:flex-row gap-3">
       {/* Search Input */}
@@ -129,7 +127,7 @@ function ProductCard({ product, onEdit, onDelete }) {
     <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg py-0 pb-6">
       <div className="relative aspect-square overflow-hidden bg-muted m-5 mb-0 rounded-md">
         <img
-          src={product.image || "/placeholder.svg"}
+          src={product.image_path || "/placeholder.svg"}
           alt={product.name}
           className="h-full w-full object-cover transition-transform hover:scale-105"
         />
@@ -175,8 +173,8 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
     category: "",
     quantity: "",
     price: "",
-    image: "",
   })
+  const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState("")
 
   useEffect(() => {
@@ -186,12 +184,13 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
         category: editProduct.category,
         quantity: editProduct.quantity.toString(),
         price: editProduct.price.toString(),
-        image: editProduct.image,
       })
-      setImagePreview(editProduct.image)
+      setImagePreview(editProduct.image_path)
+      setImageFile(null)
     } else if (!isOpen) {
-      setFormData({ name: "", category: "", quantity: "", price: "", image: "" })
+      setFormData({ name: "", category: "", quantity: "", price: "" })
       setImagePreview("")
+      setImageFile(null)
     }
   }, [editProduct, isOpen])
 
@@ -203,10 +202,10 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
   const handleImageChange = (e) => {
     const file = e.target.files?.[0]
     if (file) {
+      setImageFile(file) // Store file object
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result)
-        setFormData((prev) => ({ ...prev, image: reader.result }))
       }
       reader.readAsDataURL(file)
     }
@@ -222,24 +221,27 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
       return
     }
 
-    const productData = {
-      name: formData.name,
-      category: formData.category,
-      quantity: Number.parseInt(formData.quantity, 10),
-      price: Number.parseFloat(formData.price),
-      image: imagePreview || "/diverse-products-still-life.png",
+    const productFormData = new FormData();
+    productFormData.append('name', formData.name);
+    productFormData.append('category', formData.category);
+    productFormData.append('quantity', formData.quantity);
+    productFormData.append('price', formData.price);
+    if (imageFile) {
+        productFormData.append('image', imageFile);
     }
 
     if (editProduct) {
-      onEditProduct({ ...productData, id: editProduct.id })
-      toast.success("Product updated successfully")
+      productFormData.append('id', editProduct.id);
+      onEditProduct(productFormData)
     } else {
-      onAddProduct(productData)
-      toast.success("Product added successfully")
+      if (!imageFile) {
+        toast.error("Please select an image for the new product.");
+        return;
+      }
+      onAddProduct(productFormData)
     }
 
-    setFormData({ name: "", category: "", quantity: "", price: "", image: "" })
-    setImagePreview("")
+    // Reset state is handled by useEffect
     onOpenChange(false)
   }
 
@@ -333,133 +335,226 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
 
 // Main Products Component
 export default function Products() {
-  const [products, setProducts] = useState(initialProducts)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("") // <-- category state
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editProduct, setEditProduct] = useState(null)
-  const [deleteProduct, setDeleteProduct] = useState(null)
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(""); // <-- category state
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [editProduct, setEditProduct] = useState(null);
+    const [deleteProduct, setDeleteProduct] = useState(null);
 
-  // Filter products by selected category first (if any)
-  const filteredByCategory = useMemo(() => {
-    if (!selectedCategory || selectedCategory === "all") return products
-    return products.filter((p) => p.category === selectedCategory)
-  }, [products, selectedCategory])
+    useEffect(() => {
+        fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const productsWithNumericPrices = data.map(product => ({
+                        ...product,
+                        price: parseFloat(product.price)
+                    }));
+                    setProducts(productsWithNumericPrices);
+                } else {
+                    console.error("Fetched data is not an array:", data);
+                    setProducts([]);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching products:", error);
+                setProducts([]);
+            });
 
-  // Fuse.js setup for fuzzy search (runs on already category-filtered list)
-  const fuse = useMemo(() => {
-    return new Fuse(filteredByCategory, {
-      keys: ["name", "category"],
-      threshold: 0.3,
-      minMatchCharLength: 1,
-    })
-  }, [filteredByCategory])
+        fetch('http://localhost/silvercel_inventory_system/backend/api/categories.php')
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const categoryNames = data.map(cat => cat.name);
+                    setCategories(categoryNames);
+                } else {
+                    console.error("Fetched categories is not an array:", data);
+                    setCategories([]);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+                setCategories([]);
+            });
+    }, []);
 
-  // Search results (applies fuzzy search to category-filtered list)
-  const searchResults = useMemo(() => {
-    const query = searchQuery.trim()
-    if (!query) {
-      return filteredByCategory
-    }
-    const results = fuse.search(query)
-    return results.map((result) => result.item)
-  }, [searchQuery, fuse, filteredByCategory])
+    // Filter products by selected category first (if any)
+    const filteredByCategory = useMemo(() => {
+        if (!selectedCategory || selectedCategory === "all") return products;
+        return products.filter((p) => p.category === selectedCategory);
+    }, [products, selectedCategory]);
 
-  const handleAddProduct = (newProduct) => {
-    const product = {
-      id: Math.max(...products.map((p) => p.id), 0) + 1,
-      ...newProduct,
-    }
-    setProducts([...products, product])
-  }
+    // Fuse.js setup for fuzzy search (runs on already category-filtered list)
+    const fuse = useMemo(() => {
+        return new Fuse(filteredByCategory, {
+            keys: ["name", "category"],
+            threshold: 0.3,
+            minMatchCharLength: 1,
+        });
+    }, [filteredByCategory]);
 
-  const handleEditProduct = (updatedProduct) => {
-    setProducts(products.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)))
-    setEditProduct(null)
-  }
+    // Search results (applies fuzzy search to category-filtered list)
+    const searchResults = useMemo(() => {
+        const query = searchQuery.trim();
+        if (!query) {
+            return filteredByCategory;
+        }
+        const results = fuse.search(query);
+        return results.map((result) => result.item);
+    }, [searchQuery, fuse, filteredByCategory]);
 
-  const handleDeleteProduct = () => {
-    if (deleteProduct) {
-      setProducts(products.filter((p) => p.id !== deleteProduct.id))
-      toast.success("Product deleted successfully")
-      setDeleteProduct(null)
-    }
-  }
+    const handleAddProduct = (newProductFormData) => {
+        fetch('http://localhost/silvercel_inventory_system/backend/api/products.php', {
+            method: 'POST',
+            body: newProductFormData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            const productsWithNumericPrices = data.map(product => ({
+                                ...product,
+                                price: parseFloat(product.price)
+                            }));
+                            setProducts(productsWithNumericPrices);
+                            setSearchQuery("");
+                            setSelectedCategory("");
+                            toast.success("Product added successfully");
+                        } else {
+                            console.error("Fetched data is not an array:", data);
+                            setProducts([]);
+                        }
+                    });
+            } else {
+                toast.error(data.message || "An unknown error occurred.");
+            }
+        });
+    };
 
-  const openEditDialog = (product) => {
-    setEditProduct(product)
-    setIsDialogOpen(true)
-  }
+    const handleEditProduct = (updatedProductFormData) => {
+        fetch('http://localhost/silvercel_inventory_system/backend/api/products.php', {
+            method: 'POST',
+            body: updatedProductFormData,
+        })
+        .then(response => response.json())
+        .then((data) => {
+            if (data.id) {
+                fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            const productsWithNumericPrices = data.map(product => ({
+                                ...product,
+                                price: parseFloat(product.price)
+                            }));
+                            setProducts(productsWithNumericPrices);
+                            toast.success("Product updated successfully");
+                        } else {
+                            console.error("Fetched data is not an array:", data);
+                            setProducts([]);
+                        }
+                    });
+            } else {
+                toast.error(data.message || "An unknown error occurred.");
+            }
+        });
+        setEditProduct(null);
+    };
 
-  const openAddDialog = () => {
-    setEditProduct(null)
-    setIsDialogOpen(true)
-  }
+    const handleDeleteProduct = () => {
+        if (deleteProduct) {
+            fetch(`http://localhost/silvercel_inventory_system/backend/api/products.php?id=${deleteProduct.id}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(() => {
+                setProducts(products.filter((p) => p.id !== deleteProduct.id));
+                toast.success("Product deleted successfully");
+                setDeleteProduct(null);
+            });
+        }
+    };
 
-  return (
-    <div className="w-full flex flex-col gap-6 mt-2 sm:mt-0">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Products</h1>
-        <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto">
-          <Plus className="h-4 w-4" />
-          Add Product
-        </Button>
-      </div>
+    const openEditDialog = (product) => {
+        setEditProduct(product);
+        setIsDialogOpen(true);
+    };
 
-      {/* Search Bar (now with category prop and handler) */}
-      <SearchBar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        category={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-      />
+    const openAddDialog = () => {
+        setEditProduct(null);
+        setIsDialogOpen(true);
+    };
 
-      {/* Products Grid */}
-      {searchResults.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-          {searchResults.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onEdit={openEditDialog}
-              onDelete={(product) => setDeleteProduct(product)}
+    return (
+        <div className="w-full flex flex-col gap-6 mt-2 sm:mt-0">
+            {/* Header */}
+            <div className="flex items-center justify-between gap-4">
+                <h1 className="text-2xl font-semibold">Products</h1>
+                <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto">
+                    <Plus className="h-4 w-4" />
+                    Add Product
+                </Button>
+            </div>
+
+            {/* Search Bar (now with category prop and handler) */}
+            <SearchBar
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                category={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+                categories={categories}
             />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">No products found matching "{searchQuery}"</p>
-        </div>
-      )}
 
-      {/* Add/Edit Product Dialog */}
-      <AddProductDialog
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        onAddProduct={handleAddProduct}
-        onEditProduct={handleEditProduct}
-        categories={categories}
-        editProduct={editProduct}
-      />
+            {/* Products Grid */}
+            {searchResults.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                    {searchResults.map((product) => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onEdit={openEditDialog}
+                            onDelete={(product) => setDeleteProduct(product)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <p className="text-muted-foreground text-lg">No products found matching "{searchQuery}"</p>
+                </div>
+            )}
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!deleteProduct} onOpenChange={() => setDeleteProduct(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete "{deleteProduct?.name}" from your inventory. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteProduct} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  )
+            {/* Add/Edit Product Dialog */}
+            <AddProductDialog
+                isOpen={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                onAddProduct={handleAddProduct}
+                onEditProduct={handleEditProduct}
+                categories={categories}
+                editProduct={editProduct}
+            />
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog open={!!deleteProduct} onOpenChange={() => setDeleteProduct(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will permanently delete "{deleteProduct?.name}" from your inventory. This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteProduct} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
+    );
 }
