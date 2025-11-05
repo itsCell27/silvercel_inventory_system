@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { data } from "react-router-dom";
+import { toast } from "sonner";
 
 const AuthContext = createContext();
 
@@ -17,14 +18,17 @@ export const AuthContextProvider = ({ children }) => {
             })
             if (error) {
                 console.error("Error logging in:", error);
+                toast.error("Error logging in:", error.message);
                 return {success: false, error: error.message}
             }
 
             console.log("Logged in successfully:", data);
+            toast.success("Logged in successfully");
             return {success: true, data: data} // remove data on production
 
         } catch (error) {
             console.error("Error logging in:", error);
+            toast.error("Error logging in:", error.message);
         }
     }
 
@@ -51,8 +55,10 @@ export const AuthContextProvider = ({ children }) => {
         const { error } = supabase.auth.signOut();
         if (error) {
             console.error("Error logging out:", error);
+            toast.error("Error logging out:", error.message);
         } else {
             console.log("Logged out successfully");
+            toast.success("Logged out successfully");
         }
     }
 

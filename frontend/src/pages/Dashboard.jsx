@@ -88,7 +88,7 @@ const dashboard_products = [
 
 export default function Dashboard() {
     const { session, logout } = UserAuth();
-    console.log(session);
+    //console.log(session);
 
     const navigate = useNavigate();
 
