@@ -1,0 +1,1960 @@
+[06-Nov-2025 18:17:20 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:17:28 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:17:29 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:17:35 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:17:37 UTC] Sales data for timeRange=30d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:17:40 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:17:50 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:18:00 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:18:06 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:18:06 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:18:11 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:18:21 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:18:31 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 
+            [total_sales] => 127699
+            [items_sold] => 112
+        )
+
+)
+
+[06-Nov-2025 18:18:36 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:18:46 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:18:56 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:06 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:16 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:26 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:36 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:46 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:19:57 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:01 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:01 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:11 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:21 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:31 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:41 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:21:51 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:01 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:12 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:20 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:20 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:27 UTC] Sales data for timeRange=30d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:22:33 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:22:43 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:22:54 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:23:04 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:23:14 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:23:24 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:23:34 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:24:36 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:30:20 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:30:26 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:30:36 UTC] Sales data for timeRange=30d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:30:42 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:30:52 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:02 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:12 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:22 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:32 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:42 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:31:52 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:32:02 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:32:12 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:32:36 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:07 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:10 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:10 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:11 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:13 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:15 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:17 UTC] Sales data for timeRange=90d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-09-06
+            [total_sales] => 1550
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [2] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:18 UTC] Sales data for timeRange=30d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-10-14
+            [total_sales] => 999
+            [items_sold] => 1
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:20 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:22 UTC] Sales data for timeRange=7d: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2025-11-07
+            [total_sales] => 101450
+            [items_sold] => 101
+        )
+
+)
+
+[06-Nov-2025 18:33:23 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:25 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:27 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:29 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:31 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:33 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:35 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:37 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:39 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:41 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:43 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:45 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:47 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:49 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:51 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:53 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:55 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:57 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:33:59 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:01 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:03 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:05 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:07 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:09 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:11 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:13 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:15 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:17 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:19 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:21 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:23 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:25 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:27 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:29 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:32 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:33 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:36 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:54 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+
+[06-Nov-2025 18:34:55 UTC] Sales data for timeRange=this_year: Array
+(
+    [0] => Array
+        (
+            [order_day] => 2024
+            [total_sales] => 6200
+            [items_sold] => 4
+        )
+
+    [1] => Array
+        (
+            [order_day] => 2025
+            [total_sales] => 121499
+            [items_sold] => 108
+        )
+
+)
+

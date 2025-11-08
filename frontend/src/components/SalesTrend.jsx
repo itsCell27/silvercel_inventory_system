@@ -5,11 +5,18 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 export default function SalesTrend() {
     const [salesTrend, setSalesTrend] = useState([]);
 
-    useEffect(() => {
+    const fetchSalesTrend = () => {
         fetch('http://localhost/silvercel_inventory_system/backend/api/salestrend.php')
             .then(response => response.json())
             .then(data => setSalesTrend(data))
             .catch(error => console.error("Error fetching sales trend:", error));
+    };
+
+    useEffect(() => {
+        fetchSalesTrend();
+        const interval = setInterval(fetchSalesTrend, 10000); // Fetch data every 10 seconds
+
+        return () => clearInterval(interval); // Cleanup interval on component unmount
     }, []);
 
     return (
@@ -26,6 +33,7 @@ export default function SalesTrend() {
                         <Tooltip />
                         <Legend />
                         <Line type="monotone" dataKey="total_sales" stroke="#8884d8" />
+                        <Line type="monotone" dataKey="items_sold" stroke="#82ca9d" />
                     </LineChart>
                 </ResponsiveContainer>
             </CardContent>

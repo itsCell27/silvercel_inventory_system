@@ -1,7 +1,7 @@
 import { UserAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import StatusCards from "@/components/StatusCards";
+import DashboardStats from "@/components/DashboardStats";
 import { SalesTrendChart } from "@/components/SalesTrendChart";
 import StockByCategory from "../components/StockByCategory";
 import LowStockPopover from "@/components/LowStockPopover";
@@ -108,9 +108,7 @@ export default function Dashboard() {
                 <p className="text-2xl font-semibold">Dashboard</p>
                 <LowStockPopover lowStockItems={exampleLowStockItems} />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <StatusCards cards={dashboard_cards} />
-            </div>
+            <DashboardStats />
             <SalesTrendChart />
             <StockByCategory />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

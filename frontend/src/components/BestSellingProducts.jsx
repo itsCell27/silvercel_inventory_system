@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
-const BestSellingProducts = ({ products }) => {
+const BestSellingProducts = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchBestSellingProducts = async () => {
+      try {
+        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/bestsellers.php');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching best selling products:', error);
+      }
+    };
+
+    fetchBestSellingProducts();
+  }, []);
+
+  const getEmoji = (productName) => {
+    if (productName.toLowerCase().includes('charm')) return '🔮';
+    if (productName.toLowerCase().includes('bracelet')) return '📿';
+    if (productName.toLowerCase().includes('ring')) return '💍';
+    if (productName.toLowerCase().includes('earring')) return '💎';
+    if (productName.toLowerCase().includes('necklace') || productName.toLowerCase().includes('pendant')) return '📿';
+    return '💎'; // Default emoji
+  };
 
   return (
      <div className="bg-background">
@@ -22,15 +46,15 @@ const BestSellingProducts = ({ products }) => {
                 >
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
-                      {product.emoji}
+                      {getEmoji(product.product_name)}
                     </div>
                     <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate">
-                      {product.name}
+                      {product.product_name}
                     </span>
                   </div>
                   
                   <div className="text-xs sm:text-sm font-medium text-muted-foreground whitespace-nowrap shrink-0">
-                    {product.quantity}
+                    {product.total_quantity_sold} Pcs sold
                   </div>
                 </div>
               ))}

@@ -1,10 +1,27 @@
 "use client";
 
+import React, { useState, useEffect } from 'react';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Bell, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const LowStockPopover = ({ lowStockItems = [] }) => {
+const LowStockPopover = () => {
+  const [lowStockItems, setLowStockItems] = useState([]);
+
+  useEffect(() => {
+    const fetchLowStockItems = async () => {
+      try {
+        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/lowstock.php');
+        const data = await response.json();
+        setLowStockItems(data);
+      } catch (error) {
+        console.error('Error fetching low stock items:', error);
+      }
+    };
+
+    fetchLowStockItems();
+  }, []);
+
   return (
     <Popover>
       {/* 🔔 Bell icon with notification badge */}
@@ -35,7 +52,7 @@ const LowStockPopover = ({ lowStockItems = [] }) => {
               >
                 <span className="text-sm font-medium truncate">{item.name}</span>
                 <span className="text-xs font-semibold text-destructive">
-                  {item.stock} left
+                  {item.quantity} left
                 </span>
               </li>
             ))}

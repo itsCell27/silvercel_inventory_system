@@ -1,40 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
 
 const LowStockProducts = () => {
-  const products = [
-    {
-      id: 1,
-      name: 'Charms',
-      stock: 5,
-      emoji: '🔮'
-    },
-    {
-      id: 2,
-      name: 'Bracelets',
-      stock: 8,
-      emoji: '📿'
-    },
-    {
-      id: 3,
-      name: 'Rings',
-      stock: 3,
-      emoji: '💍'
-    },
-    {
-      id: 4,
-      name: 'Earrings',
-      stock: 12,
-      emoji: '💎'
-    },
-    {
-      id: 5,
-      name: 'Necklaces and Pendants',
-      stock: 7,
-      emoji: '📿'
-    }
-  ];
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchLowStockProducts = async () => {
+      try {
+        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/lowstock.php');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching low stock products:', error);
+      }
+    };
+
+    fetchLowStockProducts();
+  }, []);
+
+  const getEmoji = (productName) => {
+    if (productName.toLowerCase().includes('charm')) return '🔮';
+    if (productName.toLowerCase().includes('bracelet')) return '📿';
+    if (productName.toLowerCase().includes('ring')) return '💍';
+    if (productName.toLowerCase().includes('earring')) return '💎';
+    if (productName.toLowerCase().includes('necklace') || productName.toLowerCase().includes('pendant')) return '📿';
+    return '💎'; // Default emoji
+  };
 
   const getStockStatus = (stock) => {
     if (stock <= 5) return 'text-destructive';
@@ -62,15 +54,15 @@ const LowStockProducts = () => {
                 >
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
-                      {product.emoji}
+                      {getEmoji(product.name)}
                     </div>
                     <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate">
                       {product.name}
                     </span>
                   </div>
                   
-                  <div className={`text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 ${getStockStatus(product.stock)}`}>
-                    {product.stock} {product.stock === 1 ? 'pc' : 'pcs'}
+                  <div className={`text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 ${getStockStatus(product.quantity)}`}>
+                    {product.quantity} {product.quantity === 1 ? 'pc' : 'pcs'}
                   </div>
                 </div>
               ))}
