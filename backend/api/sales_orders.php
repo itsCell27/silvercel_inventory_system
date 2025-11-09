@@ -80,18 +80,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $total_price = $data->total_price;
     $order_date = $data->order_date;
 
-    $sql = "UPDATE sales_orders SET product_name = ?, quantity_sold = ?, total_price = ?, order_date = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sidsi", $product_name, $quantity_sold, $total_price, $order_date, $id);
+    // Start transaction
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
+    try {
+        // 1. Get the original quantity sold from the database
+        $sql_select_original = "SELECT quantity_sold FROM sales_orders WHERE id = ?";
+        $stmt_select_original = $conn->prepare($sql_select_original);
+        $stmt_select_original->bind_param("i", $id);
+        $stmt_select_original->execute();
+        $result_original = $stmt_select_original->get_result();
+        $original_order = $result_original->fetch_assoc();
+        $original_quantity_sold = $original_order['quantity_sold'];
+        $stmt_select_original->close();
+
+        // 2. Revert the stock by adding back the original quantity
+        $sql_update_stock_revert = "UPDATE products SET quantity = quantity + ? WHERE name = ?";
+        $stmt_revert = $conn->prepare($sql_update_stock_revert);
+        $stmt_revert->bind_param("is", $original_quantity_sold, $product_name);
+        $stmt_revert->execute();
+        $stmt_revert->close();
+
+        // 3. Check if there is enough stock for the new quantity
+        $sql_select_product = "SELECT quantity FROM products WHERE name = ?";
+        $stmt_select_product = $conn->prepare($sql_select_product);
+        $stmt_select_product->bind_param("s", $product_name);
+        $stmt_select_product->execute();
+        $result_product = $stmt_select_product->get_result();
+        $product = $result_product->fetch_assoc();
+        $current_stock = $product['quantity'];
+        $stmt_select_product->close();
+
+        if ($current_stock < $quantity_sold) {
+            throw new Exception('Insufficient stock for the updated quantity');
+        }
+
+        // 4. Update the stock with the new quantity
+        $sql_update_stock = "UPDATE products SET quantity = quantity - ? WHERE name = ?";
+        $stmt_update_stock = $conn->prepare($sql_update_stock);
+        $stmt_update_stock->bind_param("is", $quantity_sold, $product_name);
+        $stmt_update_stock->execute();
+        $stmt_update_stock->close();
+
+        // 5. Update the sales order
+        $sql_update_order = "UPDATE sales_orders SET product_name = ?, quantity_sold = ?, total_price = ?, order_date = ? WHERE id = ?";
+        $stmt_update_order = $conn->prepare($sql_update_order);
+        $stmt_update_order->bind_param("sidsi", $product_name, $quantity_sold, $total_price, $order_date, $id);
+        $stmt_update_order->execute();
+        $stmt_update_order->close();
+
+        // Commit transaction
+        $conn->commit();
+
         echo json_encode(['message' => 'Order updated successfully']);
-    } else {
-        http_response_code(500);
-        echo json_encode(['message' => 'Failed to update order']);
+    } catch (Exception $e) {
+        $conn->rollback();
+        http_response_code(400);
+        echo json_encode(['message' => $e->getMessage()]);
     }
-
-    $stmt->close();
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $id = $_GET['id'];
 

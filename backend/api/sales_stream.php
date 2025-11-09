@@ -24,6 +24,7 @@ while (true) {
         $dateExpression = "YEAR(order_date)";
         $whereClause = "WHERE order_date IS NOT NULL";
     } else {
+        $dateExpression = "DATE(order_date)";
         $interval = '3 MONTH'; // Default to 90 days
         if ($timeRange === '30d') {
             $interval = '1 MONTH';
@@ -36,8 +37,8 @@ while (true) {
     $sql = "SELECT $dateExpression as order_day, COALESCE(SUM(total_price), 0) as total_sales, COALESCE(SUM(quantity_sold), 0) as total_items_sold
             FROM sales_orders
             $whereClause
-            GROUP BY order_day
-            ORDER BY order_day";
+            GROUP BY $dateExpression
+            ORDER BY $dateExpression";
 
     $result = $conn->query($sql);
 

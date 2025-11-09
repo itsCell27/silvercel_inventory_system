@@ -58,7 +58,7 @@ const chartConfig = {
   },
   items_sold: {
     label: "Items Sold",
-    color: "var(--chart-5)",
+    color: "#f00001",
   },
 }
 
@@ -100,7 +100,7 @@ export function SalesTrendChart() {
         <div className="grid flex-1 gap-1">
           <CardTitle className="sm:text-lg text-sm">Sales Trends Over Time</CardTitle>
           <CardDescription className="text-xs sm:text-sm">
-            Showing total sales and items sold over time
+            Showing total sales and items sold
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -114,7 +114,7 @@ export function SalesTrendChart() {
             <SelectItem value="90d">Last 3 months</SelectItem>
             <SelectItem value="30d">Last 30 days</SelectItem>
             <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="this_year">All of the Year</SelectItem>
+            <SelectItem value="this_year">All of the time</SelectItem>
           </SelectContent>
         </Select>
       </CardHeader>

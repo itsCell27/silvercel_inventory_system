@@ -195,6 +195,28 @@ export default function SalesOrders() {
   }
 
   const handleUpdate = () => {
+    if (new Date(selectedOrder.order_date).getFullYear() > new Date().getFullYear()) {
+      toast.error("Cannot select a future year.");
+      return;
+    }
+    const originalOrder = orders.find((o) => o.id === selectedOrder.id);
+    const product = products.find((p) => p.name === selectedOrder.product_name);
+
+    if (!originalOrder || !product) {
+      toast.error("Product or order data not found.");
+      return;
+    }
+
+    const newQuantity = parseInt(selectedOrder.quantity_sold, 10);
+    const originalQuantity = originalOrder.quantity_sold;
+    const availableStock = product.quantity;
+
+    const maxAllowed = availableStock + originalQuantity;
+
+    if (newQuantity > maxAllowed) {
+      toast.error(`Only ${maxAllowed} items are available in stock.`);
+      return;
+    }
     fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
       method: 'PUT',
       headers: {
@@ -203,14 +225,23 @@ export default function SalesOrders() {
       body: JSON.stringify(selectedOrder),
     })
       .then((response) => response.json())
-      .then(() => {
+      .then((data) => {
+        if (data.message.includes("successfully")) {
         setOrders(
           orders.map((order) =>
-            order.id === selectedOrder.id ? selectedOrder : order
+            order.id === selectedOrder.id ? { ...selectedOrder, quantity_sold: newQuantity } : order
           )
         )
         setIsEditDialogOpen(false)
         toast.success("Order updated successfully")
+        // Refresh products list to get updated quantity
+        fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+            .then(response => response.json())
+            .then(data => setProducts(data))
+            .catch(error => console.error("Error fetching products:", error));
+        } else {
+            toast.error(data.message || "Failed to update order");
+        }
       })
       .catch((error) => {
         console.error("Error updating order:", error)
@@ -356,7 +387,12 @@ export default function SalesOrders() {
           </div>
 
           {/* Edit Order Dialog */}
-          {selectedOrder && (
+          {selectedOrder && (() => {
+            const originalOrder = orders.find((o) => o.id === selectedOrder.id);
+            const product = products.find((p) => p.name === selectedOrder.product_name);
+            const maxAllowed = product && originalOrder ? product.quantity + originalOrder.quantity_sold : Infinity;
+
+            return (
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
               <DialogContent>
                 <DialogHeader>
@@ -370,9 +406,7 @@ export default function SalesOrders() {
                     <Input
                       id="product_name"
                       value={selectedOrder.product_name}
-                      onChange={(e) =>
-                        setSelectedOrder({ ...selectedOrder, product_name: e.target.value })
-                      }
+                      readOnly
                       className="col-span-3"
                     />
                   </div>
@@ -390,6 +424,13 @@ export default function SalesOrders() {
                       className="col-span-3"
                     />
                   </div>
+                    {product && (
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <div className="col-start-2 col-span-3 text-sm text-muted-foreground">
+                          Available stock: {maxAllowed}
+                        </div>
+                      </div>
+                    )}
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="total_price" className="text-right">
                       Total Price
@@ -411,6 +452,7 @@ export default function SalesOrders() {
                     <Input
                       id="order_date"
                       type="datetime-local"
+                      max={new Date().toISOString().slice(0, 16)}
                       value={selectedOrder.order_date ? new Date(selectedOrder.order_date).toISOString().slice(0, 16) : ''}
                       onChange={(e) =>
                         setSelectedOrder({ ...selectedOrder, order_date: e.target.value })
@@ -422,7 +464,7 @@ export default function SalesOrders() {
                 <Button onClick={handleUpdate}>Save Changes</Button>
               </DialogContent>
             </Dialog>
-          )}
+          )})()}
 
           {/* Summary Section */}
           {orders.length > 0 && (
