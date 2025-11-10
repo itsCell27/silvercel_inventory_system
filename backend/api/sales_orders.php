@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $product_name = $data->product_name;
     $quantity_sold = $data->quantity_sold;
     $total_price = $data->total_price;
+    $order_date = $data->order_date;
 
     // Start transaction
     $conn->begin_transaction();
@@ -46,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $stmt_update->close();
 
         // 3. Insert sales order
-        $sql_insert = "INSERT INTO sales_orders (product_name, quantity_sold, total_price) VALUES (?, ?, ?)";
+        $sql_insert = "INSERT INTO sales_orders (product_name, quantity_sold, total_price, order_date) VALUES (?, ?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param("sid", $product_name, $quantity_sold, $total_price);
+        $stmt_insert->bind_param("sids", $product_name, $quantity_sold, $total_price, $order_date);
         $stmt_insert->execute();
         $new_id = $conn->insert_id;
         $stmt_insert->close();

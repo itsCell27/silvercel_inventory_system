@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import DashboardStats from "@/components/DashboardStats";
 import { SalesTrendChart } from "@/components/SalesTrendChart";
-import StockByCategory from "../components/StockByCategory";
+import StockByCategory from "@/components/StockByCategory";
 import LowStockPopover from "@/components/LowStockPopover";
-import BestSellingProducts from "../components/BestSellingProducts";
-import LowStockProducts from "../components/LowStockProducts";
+import BestSellingProducts from "@/components/BestSellingProducts";
+import LowStockProducts from "@/components/LowStockProducts";
 import { 
     PackageCheck, 
     PhilippinePeso, 

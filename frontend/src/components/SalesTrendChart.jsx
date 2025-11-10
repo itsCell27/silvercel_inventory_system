@@ -1,6 +1,5 @@
 "use client"
-
-import * as React from "react"
+import { useState, useEffect } from "react"
 import {
   Area,
   AreaChart,
@@ -30,12 +29,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Spinner } from "@/components/ui/spinner"
+import axios from "axios"
+import { API_BASE_URL } from "@/config"
 
 // 🧩 Debounce resize to prevent laggy re-renders
 function useDebouncedWindowWidth(delay = 200) {
-  const [width, setWidth] = React.useState(window.innerWidth)
+  const [width, setWidth] = useState(window.innerWidth)
 
-  React.useEffect(() => {
+  useEffect(() => {
     let timeout
     const handleResize = () => {
       clearTimeout(timeout)
@@ -63,32 +65,33 @@ const chartConfig = {
 }
 
 export function SalesTrendChart() {
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const [timeRange, setTimeRange] = useState("90d")
   const width = useDebouncedWindowWidth()
-  const [chartData, setChartData] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState(null)
+  const [chartData, setChartData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  React.useEffect(() => {
-    const eventSource = new EventSource(
-      `http://localhost/silvercel_inventory_system/backend/api/sales_stream.php?timeRange=${timeRange}`
-    );
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setChartData(data);
-      setLoading(false);
+  useEffect(() => {
+    
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/sales_data.php?timeRange=${timeRange}`
+        );
+       
+        setChartData(response.data);
+        setLoading(false);
+      } catch (error) {
+        
+        setError(new Error(error.message || "Failed to connect to the server"));
+        setLoading(false);
+      }
     };
 
-    eventSource.onerror = (error) => {
-      setError(new Error("Failed to connect to the server"));
-      setLoading(false);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
+    
+    return () => clearInterval(interval);
   }, [timeRange]);
 
   // Filter data by selected time range
@@ -122,7 +125,7 @@ export function SalesTrendChart() {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         {loading ? (
           <div className="flex items-center justify-center h-[250px]">
-            <p>Loading...</p>
+            <p className="flex gap-3 text-sm"><Spinner /> Loading...</p>
           </div>
         ) : error ? (
           <div className="flex items-center justify-center h-[250px]">

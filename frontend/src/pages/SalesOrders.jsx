@@ -19,6 +19,8 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { ShoppingCart, Package, Search, Pencil, Trash2, Calendar as CalendarIcon } from "lucide-react"
 import { toast } from "sonner"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar" // shadcn Calendar
 
 function ProductSelectionDialog({ onSelectProduct, selectedProduct, products }) {
   const [searchQuery, setSearchQuery] = useState("")
@@ -119,9 +121,16 @@ function ProductSelectionDialog({ onSelectProduct, selectedProduct, products }) 
 export default function SalesOrders() {
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
+
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [quantitySold, setQuantitySold] = useState("")
-  const [orderDate, setOrderDate] = useState(null)
+  const [orderDate, setOrderDate] = useState(null) // Date object
+  const [orderTime, setOrderTime] = useState(() => {
+    const now = new Date();
+    return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  });
+
+
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState(null)
 
@@ -138,8 +147,8 @@ export default function SalesOrders() {
   }, []);
 
   const handleSubmit = () => {
-    if (!selectedProduct || !quantitySold) {
-      toast.error("Please select a product and enter quantity")
+    if (!selectedProduct || !quantitySold || !orderDate) {
+      toast.error("Please fill all fields")
       return
     }
 
@@ -274,6 +283,108 @@ export default function SalesOrders() {
                 onChange={(e) => setQuantitySold(e.target.value)}
                 placeholder="Enter quantity"
               />
+            </div>
+
+            {/* Order Date selector (new) */}
+            <div className="space-y-2">
+              <Label htmlFor="order_date">Order Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left">
+                    <div className="flex items-center gap-2 w-full">
+                      <CalendarIcon className="h-4 w-4" />
+                      <span className="truncate">
+                        {orderDate ? format(orderDate, "PPP p") : "Select date & time"}
+                      </span>
+                    </div>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <div className="p-4 w-72">
+                    <Calendar
+                      mode="single"
+                      selected={orderDate}
+                      onSelect={(date) => {
+                        if (!date) {
+                          setOrderDate(null)
+                          return
+                        }
+                        const selected = Array.isArray(date) ? date[0] : date
+                        // combine with current orderTime (HH:mm) to produce a Date with time
+                        const [hh = "00", mm = "00"] = orderTime ? orderTime.split(":") : ["00", "00"]
+                        const combined = new Date(selected)
+                        combined.setHours(parseInt(hh, 10))
+                        combined.setMinutes(parseInt(mm, 10))
+                        combined.setSeconds(0)
+                        combined.setMilliseconds(0)
+                        setOrderDate(combined)
+                      }}
+
+                      captionLayout="dropdown"
+                      fromYear={1900}
+                      toYear={new Date().getFullYear()}
+                      disabled={(date) => date > new Date()}
+                    />
+
+                    {/* Time input */}
+                    <div className="mt-3 grid grid-cols-2 gap-2 items-center">
+                      <div className="flex flex-col">
+                        <Label className="text-sm">Time</Label>
+                        <Input
+                          type="time"
+                          value={orderTime}
+                          onChange={(e) => {
+                            const t = e.target.value
+                            setOrderTime(t)
+                            // if a date is already selected, update its time immediately
+                            if (orderDate) {
+                              const d = new Date(orderDate)
+                              const [hh = "00", mm = "00"] = t.split(":")
+                              d.setHours(parseInt(hh, 10))
+                              d.setMinutes(parseInt(mm, 10))
+                              d.setSeconds(0)
+                              d.setMilliseconds(0)
+                              setOrderDate(d)
+                            }
+                          }}
+                          className="w-full"
+                        />
+                      </div>
+
+                      {/* Quick buttons */}
+                      <div className="flex flex-col">
+                        <Label className="text-sm invisible">Actions</Label>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const now = new Date()
+                              setOrderDate(now)
+                              setOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                            }}
+                            className="flex-1"
+                          >
+                            Now
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setOrderDate(null)
+                              const now = new Date()
+                              setOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                            }}
+                            className="flex-1"
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/* Submit Button */}
