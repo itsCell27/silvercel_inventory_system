@@ -216,6 +216,11 @@ export default function SalesOrders() {
       return;
     }
 
+    if (selectedOrder.quantity_sold <= 0) {
+      toast.error("Quantity must be greater than 0.");
+      return;
+    }
+
     const newQuantity = parseInt(selectedOrder.quantity_sold, 10);
     const originalQuantity = originalOrder.quantity_sold;
     const availableStock = product.quantity;
@@ -514,7 +519,7 @@ export default function SalesOrders() {
           {selectedOrder && (() => {
             const originalOrder = orders.find((o) => o.id === selectedOrder.id);
             const product = products.find((p) => p.name === selectedOrder.product_name);
-            const maxAllowed = product && originalOrder ? product.quantity + originalOrder.quantity_sold : Infinity;
+            const maxAllowed = product && originalOrder ? parseInt(product.quantity, 10) + parseInt(originalOrder.quantity_sold, 10) : Infinity;
 
             return (
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -542,11 +547,26 @@ export default function SalesOrders() {
                       id="quantity_sold"
                       type="number"
                       value={selectedOrder.quantity_sold}
-                      onChange={(e) =>
-                        setSelectedOrder({ ...selectedOrder, quantity_sold: e.target.value })
-                      }
+                      onChange={(e) => {
+                        // NEW: Auto-calculate total price when quantity changes
+                        const newQtyRaw = e.target.value
+                        const newQty = newQtyRaw === "" ? "" : parseInt(newQtyRaw, 10)
+                        let newTotal = selectedOrder.total_price
+
+                        if (product && newQty !== "" && !isNaN(newQty)) {
+                          const price = parseFloat(product.price) || 0
+                          newTotal = price * newQty
+                        }
+
+                        setSelectedOrder({
+                          ...selectedOrder,
+                          quantity_sold: newQtyRaw,
+                          total_price: newTotal, // updates total price automatically
+                        })
+                      }}
                       className="col-span-3 text-xs sm:text-sm"
                     />
+
                   </div>
                     {product && (
                       <div className="grid grid-cols-4 items-center gap-4">

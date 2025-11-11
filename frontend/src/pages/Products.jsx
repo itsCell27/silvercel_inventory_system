@@ -313,9 +313,9 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
             <Label htmlFor="image">Product Image</Label>
             <Input id="image" name="image" type="file" accept="image/*" onChange={handleImageChange} />
             {imagePreview && (
-              <div className="mt-2 aspect-square overflow-hidden rounded-lg border border-border bg-muted max-w-[200px]">
-                <img src={imagePreview || "/placeholder.svg"} alt="Preview" className="h-full w-full object-cover" />
-              </div>
+                <div className="mt-2 aspect-square overflow-hidden rounded-lg border border-border bg-muted max-w-[200px]">
+                  <img src={imagePreview || "/placeholder.svg"} alt="Preview" className="h-full w-full object-cover" />
+                </div>
             )}
           </div>
 
