@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
@@ -50,6 +51,7 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 -- Table structure for table `products`
 --
 
+DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -66,6 +68,7 @@ CREATE TABLE `products` (
 -- Table structure for table `sales_orders`
 --
 
+DROP TABLE IF EXISTS `sales_orders`;
 CREATE TABLE `sales_orders` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
