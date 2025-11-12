@@ -35,9 +35,14 @@ export default function SalesOrders() {
     return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   });
 
-
+  // Edit Order Dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState(null)
+  const [isEditDateTimePopoverOpen, setIsEditDateTimePopoverOpen] = useState(false)
+  const [editOrderDate, setEditOrderDate] = useState(null)
+  const [editOrderTime, setEditOrderTime] = useState("00:00")
+
+  const [isDateTimePopoverOpen, setIsDateTimePopoverOpen] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php')
@@ -70,7 +75,7 @@ export default function SalesOrders() {
 
     const totalPrice = parseFloat(selectedProduct.price) * quantity
     const newOrder = {
-      product_name: selectedProduct.name,
+      product_id: selectedProduct.id, // Changed: use product_id
       quantity_sold: quantity,
       total_price: totalPrice,
       order_date: orderDate ? format(orderDate, "yyyy-MM-dd HH:mm:ss") : new Date().toISOString().slice(0, 19).replace('T', ' '),
@@ -106,20 +111,38 @@ export default function SalesOrders() {
   const handleEditClick = (order) => {
     setSelectedOrder(order)
     setIsEditDialogOpen(true)
+    const d = new Date(order.order_date)
+    setEditOrderDate(d)
+    setEditOrderTime(`${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`)
   }
 
   const handleUpdate = () => {
-    if (new Date(selectedOrder.order_date).getFullYear() > new Date().getFullYear()) {
+    if (!editOrderDate) {
+      toast.error("Please select an order date.");
+      return;
+    }
+
+    const updatedOrderDate = format(editOrderDate, "yyyy-MM-dd HH:mm:ss");
+
+    if (new Date(updatedOrderDate).getFullYear() > new Date().getFullYear()) {
       toast.error("Cannot select a future year.");
       return;
     }
-    const originalOrder = orders.find((o) => o.id === selectedOrder.id);
-    const product = products.find((p) => p.name === selectedOrder.product_name);
 
-    if (!originalOrder || !product) {
-      toast.error("Product or order data not found.");
+    const originalOrder = orders.find((o) => o.id === selectedOrder.id);
+    const product = products.find((p) => p.id === selectedOrder.product_id); // Changed: use product_id
+
+    console.log("Original Order:", originalOrder);
+
+    if (!originalOrder) {
+      toast.error("Order not found.");
       return;
     }
+
+    if (!product) {
+      toast.warning("Product no longer exists in current inventory, but the order can still be updated.");
+    }
+
 
     if (selectedOrder.quantity_sold <= 0) {
       toast.error("Quantity must be greater than 0.");
@@ -127,37 +150,51 @@ export default function SalesOrders() {
     }
 
     const newQuantity = parseInt(selectedOrder.quantity_sold, 10);
-    const originalQuantity = originalOrder.quantity_sold;
-    const availableStock = product.quantity;
+    const originalQuantity = parseInt(originalOrder.quantity_sold, 10);
+    let availableStock = 0;
+    let maxAllowed = Infinity;
 
-    const maxAllowed = availableStock + originalQuantity;
+    // If the product still exists, calculate actual stock.
+    if (product) {
+      availableStock = parseInt(product.quantity || 0, 10);
+      maxAllowed = availableStock + parseInt(originalOrder.quantity_sold, 10);
+    } else {
+      // Product deleted or missing, just skip stock validation.
+      toast.warning("Product not found in inventory. Skipping stock validation.");
+    }
 
-    if (newQuantity > maxAllowed) {
+    // Only run validation if product exists
+    if (product && newQuantity > maxAllowed) {
       toast.error(`Only ${maxAllowed} items are available in stock.`);
       return;
     }
+
+    const updatedOrder = {
+      ...selectedOrder,
+      order_date: updatedOrderDate
+    };
+
     fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(selectedOrder),
+      body: JSON.stringify(updatedOrder),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.message.includes("successfully")) {
-        setOrders(
-          orders.map((order) =>
-            order.id === selectedOrder.id ? { ...selectedOrder, quantity_sold: newQuantity } : order
+          setOrders(
+            orders.map((order) =>
+              order.id === selectedOrder.id ? { ...updatedOrder, quantity_sold: newQuantity } : order
+            )
           )
-        )
-        setIsEditDialogOpen(false)
-        toast.success("Order updated successfully")
-        // Refresh products list to get updated quantity
-        fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
-            .then(response => response.json())
-            .then(data => setProducts(data))
-            .catch(error => console.error("Error fetching products:", error));
+          setIsEditDialogOpen(false)
+          toast.success("Order updated successfully")
+          fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+              .then(response => response.json())
+              .then(data => setProducts(data))
+              .catch(error => console.error("Error fetching products:", error));
         } else {
             toast.error(data.message || "Failed to update order");
         }
@@ -230,13 +267,13 @@ export default function SalesOrders() {
             {/* Order Date selector (new) */}
             <div className="space-y-2">
               <Label htmlFor="order_date">Order Date</Label>
-              <Popover>
+              <Popover open={isDateTimePopoverOpen} onOpenChange={setIsDateTimePopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full justify-start text-left">
                     <div className="flex items-center gap-2 w-full">
                       <CalendarIcon className="h-4 w-4" />
                       <span className="truncate">
-                        {orderDate ? format(orderDate, "PPP p") : "Select date & time"}
+                        {orderDate ? format(orderDate, "dd/MM/yyyy hh:mm a") : "Select date & time"}
                       </span>
                     </div>
                   </Button>
@@ -335,6 +372,44 @@ export default function SalesOrders() {
                           </Button>
                         </div>
                       </div>
+
+                      {/* SAVE / CANCEL actions */}
+                      <div className="mt-3 flex justify-end gap-2 col-span-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            // just close without saving changes
+                            setIsDateTimePopoverOpen(false)
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // ensure orderDate contains the selected date combined with orderTime
+                            if (!orderDate) {
+                              // if nothing selected, default to now
+                              const now = new Date()
+                              setOrderDate(now)
+                              setOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                            } else {
+                              // combine current orderDate and orderTime to make sure time is saved
+                              const d = new Date(orderDate)
+                              const [hh = "00", mm = "00"] = orderTime ? orderTime.split(":") : ["00", "00"]
+                              d.setHours(parseInt(hh, 10))
+                              d.setMinutes(parseInt(mm, 10))
+                              d.setSeconds(0)
+                              d.setMilliseconds(0)
+                              setOrderDate(d)
+                            }
+                            setIsDateTimePopoverOpen(false)
+                          }}
+                        >
+                          Save
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </PopoverContent>
@@ -364,7 +439,10 @@ export default function SalesOrders() {
               <thead className="border-b border-border">
                 <tr className="bg-muted/50">
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                    Order ID
+                    No.
+                  </th>
+                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-[100px]">
+                    Sales ID
                   </th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-[200px]">
                     Product Name
@@ -391,30 +469,38 @@ export default function SalesOrders() {
                     </td>
                   </tr>
                 ) : (
-                  orders.map((order, index) => (
-                    <tr
-                      key={order.id}
-                      className="border-b border-border transition-colors hover:bg-muted/50"
-                    >
-                      <td className="p-4 align-middle font-medium">{orders.length - index}</td>
-                      <td className="p-4 align-middle">{order.product_name}</td>
-                      <td className="p-4 align-middle">{order.quantity_sold}</td>
-                      <td className="p-4 align-middle font-semibold text-primary">
-                        ₱{parseFloat(order.total_price).toFixed(2)}
-                      </td>
-                      <td className="p-4 align-middle text-muted-foreground text-xs sm:text-sm">
-                        {new Date(order.order_date).toLocaleString()}
-                      </td>
-                      <td className="p-4 align-middle flex">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(order)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDelete(order.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
+                  orders.map((order, index) => {
+
+                      const order_number = index + 1
+
+                      // {orders.length - index}
+                    
+                      return (
+                        <tr
+                        key={order.id}
+                        className="border-b border-border transition-colors hover:bg-muted/50"
+                        >
+                          <td className="p-4 align-middle font-medium">{order_number}</td>
+                          <td className="p-4 align-middle font-medium">{order.sales_id}</td>
+                          <td className="p-4 align-middle">{order.product_name}</td>
+                          <td className="p-4 align-middle">{order.quantity_sold}</td>
+                          <td className="p-4 align-middle font-semibold text-primary">
+                            ₱{parseFloat(order.total_price).toFixed(2)}
+                          </td>
+                          <td className="p-4 align-middle text-muted-foreground text-xs sm:text-sm">
+                            {new Date(order.order_date).toLocaleString()}
+                          </td>
+                          <td className="p-4 align-middle flex">
+                            <Button variant="ghost" size="icon" onClick={() => handleEditClick(order)}>
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleDelete(order.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      )
+                  })
                 )}
               </tbody>
             </table>
@@ -422,15 +508,19 @@ export default function SalesOrders() {
 
           {/* Edit Order Dialog */}
           {selectedOrder && (() => {
+            console.log(selectedOrder)
+            console.log(products)
             const originalOrder = orders.find((o) => o.id === selectedOrder.id);
-            const product = products.find((p) => p.name === selectedOrder.product_name);
+            const product = products.find((p) => p.id === selectedOrder.product_id); // Changed: use product_id
             const maxAllowed = product && originalOrder ? parseInt(product.quantity, 10) + parseInt(originalOrder.quantity_sold, 10) : Infinity;
+            console.log(product)
+            //console.log(maxAllowed)
 
             return (
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle className="text-sm md:text-xl">Edit Sale #{selectedOrder.id}</DialogTitle>
+                  <DialogTitle className="text-sm md:text-xl">Edit Sale #{selectedOrder.sales_id}</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -498,16 +588,164 @@ export default function SalesOrders() {
                     <Label htmlFor="order_date" className="sm:text-right text-xs sm:text-sm">
                       Order Date
                     </Label>
-                    <Input
-                      id="order_date"
-                      type="datetime-local"
-                      max={new Date().toISOString().slice(0, 16)}
-                      value={selectedOrder.order_date ? new Date(selectedOrder.order_date).toISOString().slice(0, 16) : ''}
-                      onChange={(e) =>
-                        setSelectedOrder({ ...selectedOrder, order_date: e.target.value })
-                      }
-                      className="col-span-3 text-xs sm:text-sm"
-                    />
+                    {/* --- Date & Time selector (Dialog replacement for Popover) --- */}
+                    <Dialog open={isEditDateTimePopoverOpen} onOpenChange={setIsEditDateTimePopoverOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="col-span-3 justify-start text-left text-xs sm:text-sm">
+                          <div className="flex items-center gap-2 w-full">
+                            <CalendarIcon className="h-4 w-4" />
+                            <span className="truncate">
+                              {editOrderDate ? format(editOrderDate, "dd/MM/yyyy hh:mm a") : "Select date & time"}
+                            </span>
+                          </div>
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent className="p-0 sm:p-0 max-w-none sm:max-w-[20rem] w-auto">
+                        <DialogHeader>
+                          <DialogTitle></DialogTitle>
+                        </DialogHeader>
+
+                        <div className="p-4 w-72 max-h-[80vh] overflow-hidden">
+                          <div className="h-full overflow-y-auto overflow-x-hidden">
+                            <Calendar
+                              mode="single"
+                              selected={editOrderDate}
+                              onSelect={(date) => {
+                                if (!date) {
+                                  setEditOrderDate(null)
+                                  return
+                                }
+                                const selected = Array.isArray(date) ? date[0] : date
+                                const [hh = "00", mm = "00"] = editOrderTime ? editOrderTime.split(":") : ["00", "00"]
+                                const combined = new Date(selected)
+                                combined.setHours(parseInt(hh, 10))
+                                combined.setMinutes(parseInt(mm, 10))
+                                combined.setSeconds(0)
+                                combined.setMilliseconds(0)
+                                setEditOrderDate(combined)
+                              }}
+                              captionLayout="dropdown"
+                              fromYear={1900}
+                              toYear={new Date().getFullYear()}
+                              disabled={(date) => date > new Date()}
+                            />
+
+                            {/* Time input */}
+                            <div className="mt-3 grid grid-cols-2 gap-2 items-center">
+                              <div className="flex flex-col">
+                                <Label className="text-sm">Time</Label>
+                                <div className="relative w-full">
+                                  <Input
+                                    type="time"
+                                    value={editOrderTime}
+                                    onChange={(e) => {
+                                      const t = e.target.value
+                                      setEditOrderTime(t)
+                                      if (editOrderDate) {
+                                        const d = new Date(editOrderDate)
+                                        const [hh = "00", mm = "00"] = t.split(":")
+                                        d.setHours(parseInt(hh, 10))
+                                        d.setMinutes(parseInt(mm, 10))
+                                        d.setSeconds(0)
+                                        d.setMilliseconds(0)
+                                        setEditOrderDate(d)
+                                      }
+                                    }}
+                                    className="
+                                      w-fit pr-7 md:pr-10
+                                      text-foreground
+                                      dark:text-foreground
+                                      [&::-webkit-calendar-picker-indicator]:opacity-0
+                                      [&::-webkit-calendar-picker-indicator]:absolute
+                                      [&::-webkit-calendar-picker-indicator]:right-0
+                                      [&::-webkit-calendar-picker-indicator]:w-full
+                                      [&::-webkit-calendar-picker-indicator]:h-full
+                                      [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                                    "
+                                  />
+                                  <Clock size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                                </div>
+                              </div>
+
+                              {/* Quick buttons */}
+                              <div className="flex flex-col">
+                                <Label className="text-sm invisible">Actions</Label>
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      const now = new Date()
+                                      setEditOrderDate(now)
+                                      setEditOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                                    }}
+                                    className="flex-1"
+                                  >
+                                    Now
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditOrderDate(null)
+                                      const now = new Date()
+                                      setEditOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                                    }}
+                                    className="flex-1"
+                                  >
+                                    Clear
+                                  </Button>
+                                </div>
+                              </div>
+
+                              {/* SAVE / CANCEL actions */}
+                              <div className="mt-3 flex justify-end gap-2 col-span-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    // just close without saving changes
+                                    setIsEditDateTimePopoverOpen(false)
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  onClick={() => {
+                                    // ensure editOrderDate contains the selected date combined with editOrderTime
+                                    if (!editOrderDate) {
+                                      const now = new Date()
+                                      setEditOrderDate(now)
+                                      setEditOrderTime(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`)
+                                    } else {
+                                      const d = new Date(editOrderDate)
+                                      const [hh = "00", mm = "00"] = editOrderTime ? editOrderTime.split(":") : ["00", "00"]
+                                      d.setHours(parseInt(hh, 10))
+                                      d.setMinutes(parseInt(mm, 10))
+                                      d.setSeconds(0)
+                                      d.setMilliseconds(0)
+                                      setEditOrderDate(d)
+                                    }
+
+                                    // commit chosen datetime to selectedOrder (same behavior as original)
+                                    setSelectedOrder({
+                                      ...selectedOrder,
+                                      order_date: format(editOrderDate || new Date(), "yyyy-MM-dd HH:mm:ss"),
+                                    })
+                                    setIsEditDateTimePopoverOpen(false)
+                                  }}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
                   </div>
                 </div>
                 <Button onClick={handleUpdate}>Save Changes</Button>
