@@ -5,7 +5,7 @@ require_once 'cors.php';
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $sql = "SELECT id, name, quantity
             FROM products
-            WHERE quantity < 10
+            WHERE quantity <= 10
             ORDER BY quantity ASC";
 
     $result = $conn->query($sql);
