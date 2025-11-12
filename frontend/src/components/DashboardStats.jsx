@@ -36,7 +36,7 @@ const DashboardStats = () => {
       value: formatToPHP(stats.inventory_value),
       subtitle: "Total value of all products",
       icon: Archive,
-      color: "text-chart-2",
+      color: "text-chart-4",
     },
     {
       title: "Sales This Month",

@@ -18,6 +18,7 @@ import {
   InputOTPSlot,
   InputOTPSeparator,
 } from "@/components/ui/input-otp"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sun, Moon, LogOut, Palette, CircleUserRound, KeyRound, User, Loader2, UserRoundPen, LockKeyholeOpen, Mail, ShieldCheck } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 import { useTheme } from '@/context/ThemeContext'
@@ -26,7 +27,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export default function Settings() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, colorTheme, setColorTheme } = useTheme();
   const { logout, session } = UserAuth();
   const navigate = useNavigate();
   const [newUsername, setNewUsername] = useState('');
@@ -156,6 +157,83 @@ export default function Settings() {
                 <span className="sr-only">Toggle theme</span>
                 </Button>
             </div>
+
+            {/* item */}
+            <div className="flex items-center justify-between">
+                <div className='mr-2'>
+                <h3 className="font-medium">Color Theme</h3>
+                <p className="text-sm text-muted-foreground">
+                    Switch between colors
+                </p>
+                </div>
+                <RadioGroup
+                  value={colorTheme}
+                  onValueChange={(value) => setColorTheme(value)}
+                  defaultValue="default"
+                  className="flex justify-end items-center gap-3 flex-wrap"
+                >
+                  {/* Default Theme */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="default"
+                      id="theme-default"
+                      className="w-6 h-6 rounded-full border-[3px] border-[oklch(0.68_0.16_250)] 
+                        data-[state=checked]:bg-[oklch(0.68_0.16_250)] 
+                        data-[state=checked]:border-[oklch(0.68_0.16_250)] 
+                        transition-all hover:scale-110"
+                    />
+                  </div>
+
+                  {/* Purple Theme */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="purple"
+                      id="theme-purple"
+                      className="w-6 h-6 rounded-full border-[3px] border-[oklch(0.55_0.22_280)] 
+                        data-[state=checked]:bg-[oklch(0.55_0.22_280)] 
+                        data-[state=checked]:border-[oklch(0.55_0.22_280)] 
+                        transition-all hover:scale-110"
+                    />
+                  </div>
+
+                  {/* Green Theme */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="green"
+                      id="theme-green"
+                      className="w-6 h-6 rounded-full border-[3px] border-[oklch(0.6_0.21_140)] 
+                        data-[state=checked]:bg-[oklch(0.6_0.21_140)] 
+                        data-[state=checked]:border-[oklch(0.6_0.21_140)] 
+                        transition-all hover:scale-110"
+                    />
+                  </div>
+
+                  {/* Pink Theme */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="pink"
+                      id="theme-pink"
+                      className="w-6 h-6 rounded-full border-[3px] border-[oklch(0.63_0.12_350)] 
+                        data-[state=checked]:bg-[oklch(0.63_0.12_350)] 
+                        data-[state=checked]:border-[oklch(0.63_0.12_350)] 
+                        transition-all hover:scale-110"
+                    />
+                  </div>
+
+                  {/* Red Theme */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="red"
+                      id="theme-red"
+                      className="w-6 h-6 rounded-full border-[3px] border-[oklch(0.65_0.25_25)] 
+                        data-[state=checked]:bg-[oklch(0.65_0.25_25)] 
+                        data-[state=checked]:border-[oklch(0.65_0.25_25)] 
+                        transition-all hover:scale-110"
+                    />
+                  </div>
+                </RadioGroup>
+
+            </div>
         </Card>
 
         <Card className="p-6">
@@ -209,7 +287,7 @@ export default function Settings() {
                           <Button 
                             onClick={handleSendVerificationCode}
                             disabled={codeSent || loading}
-                            className="w-full"
+                            className="w-full text-white"
                             variant={codeSent ? "secondary" : "default"}
                           >
                             {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
@@ -275,7 +353,7 @@ export default function Settings() {
                         <Button 
                           onClick={handleChangeEmail}
                           disabled={!newEmail || !confirmNewEmail || verificationCode.length !== 6 || loading}
-                          className="w-full"
+                          className="w-full text-white"
                         >
                           {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                           Change Email
@@ -322,6 +400,7 @@ export default function Settings() {
                     </div>
                     <DialogFooter>
                       <Button 
+                        className="text-white"
                         disabled={!newUsername || loading}
                         onClick={async () => {
                           setLoading(true);
@@ -398,6 +477,7 @@ export default function Settings() {
                     </div>
                     <DialogFooter>
                       <Button
+                        className="text-white"
                         disabled={!currentPassword || !newPassword || !confirmNewPassword || loading}
                         onClick={async () => {
                           if (newPassword !== confirmNewPassword) {
@@ -455,7 +535,7 @@ export default function Settings() {
                 </div>
                 <Button
                     onClick={handleLogout}
-                    className="sm:gap-2"
+                    className="sm:gap-2 text-white"
                 >
                     <LogOut className="h-4 w-4" />
                     <span className='hidden sm:block'>Logout</span>
@@ -473,13 +553,13 @@ export default function Settings() {
               Confirm Your Email Change
             </DialogTitle>
             <DialogDescription>
-              We’ve sent confirmation emails to both your <strong>{currentEmail}</strong> and <strong>{newEmail}</strong> email addresses.
+              We’ve sent confirmation emails to both your <strong>{currentEmail}</strong> and <strong>{newEmail || "new"}</strong> email addresses.
               <br />
               Please open both inboxes and click the confirmation links to finalize your email update.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => setConfirmationDialogOpen(false)} className="w-full">
+            <Button onClick={() => setConfirmationDialogOpen(false)} className="w-full text-white">
               Got it
             </Button>
           </DialogFooter>

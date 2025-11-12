@@ -320,7 +320,7 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
           </div>
 
           <div className="flex gap-6 pt-4">
-            <Button onClick={handleSubmit} className="flex-1">
+            <Button onClick={handleSubmit} className="flex-1 text-white">
               {editProduct ? "Update Product" : "Add Product"}
             </Button>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
@@ -495,7 +495,7 @@ export default function Products() {
             {/* Header */}
             <div className="flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-semibold">Products</h1>
-                <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto">
+                <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto text-white">
                     <Plus className="h-4 w-4" />
                     Add Product
                 </Button>

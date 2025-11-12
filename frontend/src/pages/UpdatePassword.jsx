@@ -83,7 +83,7 @@ export default function UpdatePassword() {
                 </div>
                 
             </div>
-            <Button type="submit" className="w-full">Update Password</Button>
+            <Button type="submit" className="w-full text-white">Update Password</Button>
         </form>
       ) : (
         <div className="text-center space-y-3">

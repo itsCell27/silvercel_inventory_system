@@ -135,7 +135,7 @@ export default function Welcome() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full text-white">
             Set Password & Continue
           </Button>
         </form>

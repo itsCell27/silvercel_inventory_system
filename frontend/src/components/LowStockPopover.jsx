@@ -44,14 +44,14 @@ const LowStockPopover = () => {
         {lowStockItems.length === 0 ? (
           <p className="text-sm text-muted-foreground">All stocks are sufficient</p>
         ) : (
-          <ul className="space-y-2 max-h-48 overflow-y-auto">
+          <ul className="space-y-2 max-h-[40vh] sm:max-h-48 overflow-y-auto">
             {lowStockItems.map((item, index) => (
               <li
                 key={index}
-                className="flex justify-between items-center py-1"
+                className="flex justify-center items-center py-1 gap-3"
               >
-                <span className="text-sm font-medium truncate">{item.name}</span>
-                <span className="text-xs font-semibold text-destructive">
+                <span className="text-sm font-medium truncate text-wrap">{item.name}</span>
+                <span className="text-xs font-semibold text-destructive flex-1 text-nowrap">
                   {item.quantity} left
                 </span>
               </li>

@@ -47,21 +47,30 @@ export default function StockByCategory() {
   useEffect(() => {
     const fetchStockByCategory = async () => {
       try {
-        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/stockbycategory.php');
+        const response = await fetch(
+          "http://localhost/silvercel_inventory_system/backend/api/stockbycategory.php"
+        );
         const data = await response.json();
 
-        const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+        // 🎨 Use ShadCN chart color variables
+        const themeColors = [
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-1").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-2").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-3").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-4").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-5").trim(),
+        ];
 
         const newChartData = data.map((item, index) => ({
           category: item.category_name,
           stock: parseInt(item.total_quantity, 10),
-          fill: COLORS[index % COLORS.length],
+          fill: themeColors[index % themeColors.length], // Use ShadCN chart colors
         }));
 
         const newChartConfig = data.reduce((acc, item, index) => {
           acc[item.category_name.toLowerCase()] = {
             label: item.category_name,
-            color: COLORS[index % COLORS.length],
+            color: themeColors[index % themeColors.length],
           };
           return acc;
         }, { stock: { label: "Stock" } });
@@ -69,12 +78,22 @@ export default function StockByCategory() {
         setChartData(newChartData);
         setChartConfig(newChartConfig);
       } catch (error) {
-        console.error('Error fetching stock by category:', error);
+        console.error("Error fetching stock by category:", error);
       }
     };
 
     fetchStockByCategory();
+
+    // 💡 Re-fetch theme colors when theme changes
+    const observer = new MutationObserver(fetchStockByCategory);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-color-theme"],
+    });
+
+    return () => observer.disconnect();
   }, []);
+
 
   return (
     <Card className="flex flex-col bg-(--color-card) text-(--color-card-foreground) border border-(--color-border)">

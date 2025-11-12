@@ -7,6 +7,7 @@ export const ThemeContextProvider = ({ children }) => {
         // Try to get theme from localStorage, default to 'light' if not found
         return localStorage.getItem('theme') || 'light'
     });
+    const [colorTheme, setColorTheme] = useState(localStorage.getItem("colorTheme") || "default");
 
     useEffect(() => {
         // Update localStorage when theme changes
@@ -20,12 +21,21 @@ export const ThemeContextProvider = ({ children }) => {
         }
     }, [theme]);
 
+    useEffect(() => {
+        if (colorTheme === "default") {
+            delete document.documentElement.dataset.colorTheme;
+        } else {
+            document.documentElement.dataset.colorTheme = colorTheme;
+        }
+        localStorage.setItem("colorTheme", colorTheme);
+    }, [colorTheme]);
+
     const toggleTheme = () => {
         setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, colorTheme, setColorTheme }}>
             {children}
         </ThemeContext.Provider>
     );

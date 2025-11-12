@@ -73,7 +73,7 @@ function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
           </div>
         </div>
         <div className="flex gap-3 pt-2">
-          <Button onClick={handleSubmit} className="flex-1">
+          <Button onClick={handleSubmit} className="flex-1 text-white">
             {editCategory ? "Update" : "Add"} Category
           </Button>
           <Button
@@ -223,7 +223,7 @@ export default function Categories() {
               Delete ({selectedCategories.length})
             </Button>
           )}
-          <Button onClick={openAddDialog} className="gap-2 flex-1 sm:flex-initial">
+          <Button onClick={openAddDialog} className="gap-2 flex-1 sm:flex-initial text-white">
             <Plus className="h-4 w-4" />
             Add Category
           </Button>

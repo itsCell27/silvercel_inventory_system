@@ -387,6 +387,7 @@ export default function SalesOrders() {
                         </Button>
                         <Button
                           size="sm"
+                          className="text-white"
                           onClick={() => {
                             // ensure orderDate contains the selected date combined with orderTime
                             if (!orderDate) {
@@ -419,7 +420,7 @@ export default function SalesOrders() {
             {/* Submit Button */}
             <div className="space-y-2">
               <Label className="invisible">Action</Label>
-              <Button onClick={handleSubmit} className="w-full">
+              <Button onClick={handleSubmit} className="w-full text-white">
                 Add Order
               </Button>
             </div>
@@ -713,6 +714,7 @@ export default function SalesOrders() {
                                 </Button>
                                 <Button
                                   size="sm"
+                                  className="text-white"
                                   onClick={() => {
                                     // ensure editOrderDate contains the selected date combined with editOrderTime
                                     if (!editOrderDate) {
@@ -748,7 +750,7 @@ export default function SalesOrders() {
 
                   </div>
                 </div>
-                <Button onClick={handleUpdate}>Save Changes</Button>
+                <Button onClick={handleUpdate} className="text-white">Save Changes</Button>
               </DialogContent>
             </Dialog>
           )})()}

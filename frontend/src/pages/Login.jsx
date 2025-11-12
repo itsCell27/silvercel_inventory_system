@@ -138,7 +138,7 @@ export default function Login() {
             </div>
 
             {/* Login Button */}
-            <Button type="submit" className="w-full font-medium">
+            <Button type="submit" className="w-full font-medium text-white">
               Login
             </Button>
 

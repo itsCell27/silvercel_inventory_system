@@ -3,7 +3,7 @@ require_once 'database_connection.php';
 require_once 'cors.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $sql = "SELECT id, name, quantity
+    $sql = "SELECT id, name, quantity, image_path
             FROM products
             WHERE quantity <= 10
             ORDER BY quantity ASC";

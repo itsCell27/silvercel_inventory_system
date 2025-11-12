@@ -50,13 +50,17 @@ const LowStockProducts = () => {
               {products.map((product) => (
                 <div
                   key={product.id}
-                  className="flex items-center justify-between p-2 sm:p-3 md:p-4 rounded-lg bg-card hover:bg-accent/50 transition-colors duration-200 gap-2"
+                  className="flex gap-4 items-center justify-between pl-0 p-2 sm:p-3 md:p-4 rounded-lg bg-card hover:bg-accent/50 transition-colors duration-200"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
-                      {getEmoji(product.name)}
+                    <div className="w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
+                      <img
+                        src={product.image_path || "/placeholder.svg"}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-transform hover:scale-105 rounded-lg border"
+                      />
                     </div>
-                    <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate">
+                    <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate text-wrap">
                       {product.name}
                     </span>
                   </div>

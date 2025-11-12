@@ -87,7 +87,7 @@ export default function ForgotPassword() {
             {/* Forgot password */}
             <Button
               type="button"
-              className="w-full"
+              className="w-full text-white"
               disabled={forgotLoading}
               onClick={async () => {
                 if (!email) return toast.error("Enter your email first.");
