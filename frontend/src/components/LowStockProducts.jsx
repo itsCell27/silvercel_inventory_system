@@ -47,29 +47,33 @@ const LowStockProducts = () => {
             </div>
             
             <div className="space-y-2 sm:space-y-3 md:space-y-4">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="flex gap-4 items-center justify-between pl-0 p-2 sm:p-3 md:p-4 rounded-lg bg-card hover:bg-accent/50 transition-colors duration-200"
-                >
-                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
-                    <div className="w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
-                      <img
-                        src={product.image_path || "/placeholder.svg"}
-                        alt={product.name}
-                        className="h-full w-full object-cover transition-transform hover:scale-105 rounded-lg border"
-                      />
+              {products.length > 0 ?  
+                products.map((product) => (
+                  <div
+                    key={product.id}
+                    className="flex gap-4 items-center justify-between pl-0 p-2 sm:p-3 md:p-4 rounded-lg bg-card hover:bg-accent/50 transition-colors duration-200"
+                  >
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
+                      <div className="w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">
+                        <img
+                          src={product.image_path || "/placeholder.svg"}
+                          alt={product.name}
+                          className="h-full w-full object-cover transition-transform hover:scale-105 rounded-lg border"
+                        />
+                      </div>
+                      <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate text-wrap">
+                        {product.name}
+                      </span>
                     </div>
-                    <span className="font-medium text-foreground text-xs sm:text-sm md:text-base truncate text-wrap">
-                      {product.name}
-                    </span>
+                    
+                    <div className={`text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 ${getStockStatus(product.quantity)}`}>
+                      {product.quantity} {product.quantity === 1 ? 'pc' : 'pcs'}
+                    </div>
                   </div>
-                  
-                  <div className={`text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 ${getStockStatus(product.quantity)}`}>
-                    {product.quantity} {product.quantity === 1 ? 'pc' : 'pcs'}
-                  </div>
-                </div>
-              ))}
+                )) : (
+                  <p className="text-sm text-muted-foreground">All products are sufficiently stocked.</p>
+                )
+              }
             </div>
           </CardContent>
         </Card>

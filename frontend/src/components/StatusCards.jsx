@@ -53,12 +53,12 @@ export default function StatusCards({ cards }) {
                 return (
                     <Card key={index} className="hover:shadow-md transition-shadow">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-md font-medium text-muted-foreground">{card.title}</CardTitle>
+                        <CardTitle className="text-md sm:text-base font-medium text-muted-foreground">{card.title}</CardTitle>
                         <card.icon className={`h-6 w-6 ${card.color}`} />
                       </CardHeader>
-                      <CardContent className="mt-6">
-                        <div className="text-2xl font-bold text-foreground">{card.value}</div>
-                        <p className="text-xs text-muted-foreground mt-1">{card.subtitle}</p>
+                      <CardContent className="sm:mt-6">
+                        <div className="text-lg sm:text-2xl font-bold text-foreground">{card.value}</div>
+                        <p className="text-sm text-muted-foreground mt-1">{card.subtitle}</p>
                       </CardContent>
                     </Card>
                 ) 
