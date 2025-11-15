@@ -4,9 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { CircleCheckBig } from "lucide-react";
-import { Eye, EyeOff, Package } from "lucide-react";
+import { Eye, EyeOff, Check, X, CircleCheckBig } from "lucide-react";
 
+
+function PasswordRequirement({ met, text }) {
+  return (
+    <div className={`flex items-center gap-2 text-sm ${met ? 'text-green-600' : 'text-muted-foreground'}`}>
+      {met ? <Check size={14} /> : <X size={14} />}
+      <span>{text}</span>
+    </div>
+  );
+}
 
 export default function UpdatePassword() {
 
@@ -20,15 +28,21 @@ export default function UpdatePassword() {
 
   const navigate = useNavigate();
 
-  const validatePassword = (pwd) => {
-    // Minimum 8 chars, at least one uppercase, one lowercase, one digit, one symbol
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
-    return regex.test(pwd);
+  // Password validation checks (same rules as ResetPassword.jsx)
+  const passwordChecks = {
+    minLength: password.length >= 8,
+    hasUpperCase: /[A-Z]/.test(password),
+    hasLowerCase: /[a-z]/.test(password),
+    hasNumber: /\d/.test(password),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
   };
+
+  const allChecksPassed = Object.values(passwordChecks).every(Boolean);
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!validatePassword(password)) {
+    if (!allChecksPassed) {
       const msg = "Password must be at least 8 characters and include upper & lowercase letters, a digit, and a symbol.";
       setError(msg);
       toast.error(msg);
@@ -67,6 +81,31 @@ export default function UpdatePassword() {
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                 </div>
+
+                <div className="mt-2 space-y-1 text-xs w-full">
+                  <p className="font-medium text-muted-foreground">Password must contain:</p>
+
+                  <PasswordRequirement
+                    met={passwordChecks.minLength}
+                    text="At least 8 characters"
+                  />
+                  <PasswordRequirement
+                    met={passwordChecks.hasUpperCase}
+                    text="One uppercase letter (A-Z)"
+                  />
+                  <PasswordRequirement
+                    met={passwordChecks.hasLowerCase}
+                    text="One lowercase letter (a-z)"
+                  />
+                  <PasswordRequirement
+                    met={passwordChecks.hasNumber}
+                    text="One number (0-9)"
+                  />
+                  <PasswordRequirement
+                    met={passwordChecks.hasSpecialChar}
+                    text="One special character (!@#$%^&*...)"
+                  />
+                </div>
                 
             </div>
             <div className="flex flex-col w-full items-start gap-1 relative">
@@ -83,7 +122,7 @@ export default function UpdatePassword() {
                 </div>
                 
             </div>
-            <Button type="submit" className="w-full text-white">Update Password</Button>
+            <Button type="submit" className="w-full text-white" disabled={!allChecksPassed} >Update Password</Button>
         </form>
       ) : (
         <div className="text-center space-y-3">

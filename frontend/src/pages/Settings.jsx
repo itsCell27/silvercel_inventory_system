@@ -19,21 +19,49 @@ import {
   InputOTPSeparator,
 } from "@/components/ui/input-otp"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Sun, Moon, LogOut, Palette, CircleUserRound, KeyRound, User, Loader2, UserRoundPen, LockKeyholeOpen, Mail, ShieldCheck } from 'lucide-react'
+import { Sun, Moon, LogOut, Palette, CircleUserRound, KeyRound, User, Loader2, UserRoundPen, LockKeyholeOpen, Mail, ShieldCheck, Eye, EyeOff, Check, X } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 import { useTheme } from '@/context/ThemeContext'
 import { UserAuth } from '@/context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
+function PasswordRequirement({ met, text }) {
+  return (
+    <div className={`flex items-center gap-2 text-sm ${met ? 'text-green-600' : 'text-muted-foreground'}`}>
+      {met ? <Check size={14} /> : <X size={14} />}
+      <span>{text}</span>
+    </div>
+  );
+}
+
 export default function Settings() {
   const { theme, toggleTheme, colorTheme, setColorTheme } = useTheme();
   const { logout, session } = UserAuth();
   const navigate = useNavigate();
   const [newUsername, setNewUsername] = useState('');
+
+  // Password change states
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  // Password validation checks
+  const passwordChecks = {
+    minLength: newPassword.length >= 8,
+    hasUpperCase: /[A-Z]/.test(newPassword),
+    hasLowerCase: /[a-z]/.test(newPassword),
+    hasNumber: /\d/.test(newPassword),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword),
+  };
+
+  const allChecksPassed = Object.values(passwordChecks).every(check => check);
+
+
   const [loading, setLoading] = useState(false);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -456,29 +484,90 @@ export default function Settings() {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                      <Input
-                        type="password"
-                        placeholder="Current password"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                      />
-                      <Input
-                        type="password"
-                        placeholder="New password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                      <Input
-                        type="password"
-                        placeholder="Confirm new password"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                      />
+                      {/* Current Password */}
+                      <div className="relative">
+                        <Input
+                          type={showCurrent ? "text" : "password"}
+                          placeholder="Current password"
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrent(!showCurrent)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        >
+                          {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
+
+                      <div className="flex flex-col items-start w-full">
+                        {/* New Password */}
+                        <div className="relative w-full">
+                          <Input
+                            type={showNew ? "text" : "password"}
+                            placeholder="New password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNew(!showNew)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                          >
+                            {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
+
+                        {/* Password Requirements */}
+                        <div className="mt-2 space-y-1 text-xs">
+                          <p className="font-medium text-muted-foreground">Password must contain:</p>
+
+                          <PasswordRequirement
+                            met={passwordChecks.minLength}
+                            text="At least 8 characters"
+                          />
+                          <PasswordRequirement
+                            met={passwordChecks.hasUpperCase}
+                            text="One uppercase letter (A-Z)"
+                          />
+                          <PasswordRequirement
+                            met={passwordChecks.hasLowerCase}
+                            text="One lowercase letter (a-z)"
+                          />
+                          <PasswordRequirement
+                            met={passwordChecks.hasNumber}
+                            text="One number (0-9)"
+                          />
+                          <PasswordRequirement
+                            met={passwordChecks.hasSpecialChar}
+                            text="One special character (!@#$%^&*...)"
+                          />
+                        </div>
+                      </div>
+
+
+                      {/* Confirm New Password */}
+                      <div className="relative">
+                        <Input
+                          type={showConfirm ? "text" : "password"}
+                          placeholder="Confirm new password"
+                          value={confirmNewPassword}
+                          onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirm(!showConfirm)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        >
+                          {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
                     </div>
                     <DialogFooter>
                       <Button
                         className="text-white"
-                        disabled={!currentPassword || !newPassword || !confirmNewPassword || loading}
+                        disabled={!currentPassword || !newPassword || !confirmNewPassword || !allChecksPassed || loading}
                         onClick={async () => {
                           if (newPassword !== confirmNewPassword) {
                             toast.error("New passwords don't match");
