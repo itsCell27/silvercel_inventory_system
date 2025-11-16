@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge"
 import { Plus, Search, Edit, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import Fuse from "fuse.js"
+import BackToTopButton from "@/components/BackToTopButton";
 
 const initialProducts = [
   {
@@ -555,6 +556,8 @@ export default function Products() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            <BackToTopButton />
         </div>
     );
 }

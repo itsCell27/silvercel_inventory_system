@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import BackToTopButton from "@/components/BackToTopButton";
 
 const dashboard_cards = [
     {
@@ -115,6 +116,8 @@ export default function Dashboard() {
                 <BestSellingProducts products={dashboard_products} />
                 <LowStockProducts />
             </div>
+
+            <BackToTopButton />
         </div>
     )
 }

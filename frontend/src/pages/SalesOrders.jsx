@@ -22,6 +22,7 @@ import { toast } from "sonner"
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar" // shadcn Calendar
 import ProductSelectionDialog from "@/components/sales_orders/ProductSelectionDialog"
+import BackToTopButton from "@/components/BackToTopButton";
 
 export default function SalesOrders() {
   const [orders, setOrders] = useState([])
@@ -778,6 +779,8 @@ export default function SalesOrders() {
           )}
         </CardContent>
       </Card>
+
+      <BackToTopButton />
     </div>
   )
 }

@@ -25,6 +25,7 @@ import { useTheme } from '@/context/ThemeContext'
 import { UserAuth } from '@/context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import BackToTopButton from "@/components/BackToTopButton";
 
 function PasswordRequirement({ met, text }) {
   return (
@@ -654,6 +655,8 @@ export default function Settings() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <BackToTopButton />
 
     </div>
   )

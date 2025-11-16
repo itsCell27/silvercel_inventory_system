@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import BackToTopButton from "@/components/BackToTopButton";
 
 function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
   const [categoryName, setCategoryName] = useState("");
@@ -319,6 +320,8 @@ export default function Categories() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <BackToTopButton />
     </div>
   );
 }
