@@ -192,18 +192,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $id = $_GET['id'];
 
-    $sql = "DELETE FROM sales_orders WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
-        echo json_encode(['message' => 'Order deleted successfully']);
-    } else {
+    try {
+        // 1. Get the product_id and quantity_sold from the order being deleted
+        $sql_select = "SELECT product_id, quantity_sold FROM sales_orders WHERE id = ?";
+        $stmt_select = $conn->prepare($sql_select);
+        $stmt_select->bind_param("i", $id);
+        $stmt_select->execute();
+        $result = $stmt_select->get_result();
+        $order = $result->fetch_assoc();
+        $product_id = $order['product_id'];
+        $quantity_sold = $order['quantity_sold'];
+        $stmt_select->close();
+
+        // 2. Update the product stock
+        $sql_update = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("ii", $quantity_sold, $product_id);
+        $stmt_update->execute();
+        $stmt_update->close();
+
+        // 3. Delete the sales order
+        $sql_delete = "DELETE FROM sales_orders WHERE id = ?";
+        $stmt_delete = $conn->prepare($sql_delete);
+        $stmt_delete->bind_param("i", $id);
+        $stmt_delete->execute();
+        $stmt_delete->close();
+
+        $conn->commit();
+
+        echo json_encode(['message' => 'Order deleted successfully and stock restored']);
+    } catch (Exception $e) {
+        $conn->rollback();
         http_response_code(500);
-        echo json_encode(['message' => 'Failed to delete order']);
+        echo json_encode(['message' => 'Failed to delete order: ' . $e->getMessage()]);
     }
-
-    $stmt->close();
 }
 
 $conn->close();

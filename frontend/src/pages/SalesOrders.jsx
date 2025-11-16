@@ -211,9 +211,18 @@ export default function SalesOrders() {
       method: 'DELETE',
     })
       .then((response) => response.json())
-      .then(() => {
-        setOrders(orders.filter((order) => order.id !== id));
-        toast.success("Order deleted successfully");
+      .then((data) => {
+        if (data.message.includes("successfully")) {
+          setOrders(orders.filter((order) => order.id !== id));
+          toast.success("Order deleted successfully and stock restored");
+          // Refresh products list to get updated quantity
+          fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+              .then(response => response.json())
+              .then(data => setProducts(data))
+              .catch(error => console.error("Error fetching products:", error));
+        } else {
+          toast.error(data.message || "Failed to delete order");
+        }
       })
       .catch((error) => {
         console.error("Error deleting order:", error);
