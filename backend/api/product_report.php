@@ -23,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $conditions[] = "c.name = '" . $conn->real_escape_string($category) . "'";
     }
 
+    if (is_string($product_ids)) {
+        $product_ids = explode(',', $product_ids);
+    }
+
     if (!empty($product_ids)) {
         $product_id_conditions = [];
         foreach ($product_ids as $product_id) {

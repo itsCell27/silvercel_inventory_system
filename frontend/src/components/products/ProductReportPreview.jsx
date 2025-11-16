@@ -68,26 +68,16 @@ export default function ProductReportPreview({ open, onOpenChange }) {
     setSelectedRows(newFilteredData.map(row => row.id));
   }, [selectedCategory, reportData]);
 
-  useEffect(() => {
-      fetch(`${API_BASE_URL}/categories.php`)
-          .then(response => response.json())
-          .then(data => setCategories(data));
-  
-      const categoryString = selectedCategories.length > 0 ? selectedCategories.join(',') : 'all';
-      fetch(`${API_BASE_URL}/products.php?category=${categoryString}`)
-          .then(response => response.json())
-          .then(data => setProducts(data));
-  }, [selectedCategories]);
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
   const handleDownload = () => {
-        const categoryString = selectedCategories.join(',');
-        const url = `${API_BASE_URL}/download_products.php?categories=${categoryString}`;
-        window.location.href = url;
-    };
+    const productIds = selectedRows.join(',');
+    const category = selectedCategory;
+    const url = `${API_BASE_URL}/product_report.php?category=${category}&product_ids=${productIds}`;
+    window.location.href = url;
+  };
   const handleSelectAll = (checked) => {
     if (checked) {
       setSelectedRows(filteredReportData.map(row => row.id));
