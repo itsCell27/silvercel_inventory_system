@@ -23,6 +23,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { API_BASE_URL } from '@/config';
 
 // 🧩 Custom hook: debounce resize for smoother chart updates
 function useDebouncedWindowWidth(delay = 200) {
@@ -48,7 +49,7 @@ export default function StockByCategory() {
     const fetchStockByCategory = async () => {
       try {
         const response = await fetch(
-          "http://localhost/silvercel_inventory_system/backend/api/stockbycategory.php"
+          `${API_BASE_URL}/stockbycategory.php`
         );
         const data = await response.json();
 

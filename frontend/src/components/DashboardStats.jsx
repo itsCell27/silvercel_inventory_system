@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StatusCards from './StatusCards';
 import { Package, Archive, TrendingUp, AlertTriangle } from 'lucide-react';
+import { API_BASE_URL } from '@/config';
 
 const DashboardStats = () => {
   const [stats, setStats] = useState(null);
@@ -8,7 +9,7 @@ const DashboardStats = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/get_all_data.php');
+        const response = await fetch(`${API_BASE_URL}/get_all_data.php`);
         const data = await response.json();
         setStats(data);
       } catch (error) {

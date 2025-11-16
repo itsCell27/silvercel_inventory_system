@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { API_BASE_URL } from "@/config";
 
 export default function ProductReportPreview({ open, onOpenChange }) {
   const [reportData, setReportData] = useState([]);
@@ -35,7 +36,7 @@ export default function ProductReportPreview({ open, onOpenChange }) {
 
   useEffect(() => {
     if (open) {
-      fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+      fetch(`${API_BASE_URL}/products.php`)
         .then(response => response.json())
         .then(data => {
           setReportData(data);
@@ -59,12 +60,12 @@ export default function ProductReportPreview({ open, onOpenChange }) {
   }, [selectedCategory, reportData]);
 
   useEffect(() => {
-      fetch('http://localhost/silvercel_inventory_system/backend/api/categories.php')
+      fetch(`${API_BASE_URL}/categories.php`)
           .then(response => response.json())
           .then(data => setCategories(data));
   
       const categoryString = selectedCategories.length > 0 ? selectedCategories.join(',') : 'all';
-      fetch(`http://localhost/silvercel_inventory_system/backend/api/products.php?category=${categoryString}`)
+      fetch(`${API_BASE_URL}/products.php?category=${categoryString}`)
           .then(response => response.json())
           .then(data => setProducts(data));
   }, [selectedCategories]);
@@ -79,7 +80,7 @@ export default function ProductReportPreview({ open, onOpenChange }) {
 
   const handleDownload = () => {
         const categoryString = selectedCategories.join(',');
-        const url = `http://localhost/silvercel_inventory_system/backend/api/download_products.php?categories=${categoryString}`;
+        const url = `${API_BASE_URL}/download_products.php?categories=${categoryString}`;
         window.location.href = url;
     };
   const handleSelectAll = (checked) => {

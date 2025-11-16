@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { API_BASE_URL } from '@/config';
 
 export default function LowStock() {
     const [lowstock, setLowstock] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost/silvercel_inventory_system/backend/api/lowstock.php')
+        fetch(`${API_BASE_URL}/lowstock.php`)
             .then(response => response.json())
             .then(data => setLowstock(data))
             .catch(error => console.error("Error fetching low-stock products:", error));

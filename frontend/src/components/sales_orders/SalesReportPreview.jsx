@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { API_BASE_URL } from "@/config";
 
 export default function SalesReportPreview({ open, onOpenChange }) {
   const [reportData, setReportData] = useState([]);
@@ -35,7 +36,7 @@ export default function SalesReportPreview({ open, onOpenChange }) {
 
   useEffect(() => {
     if (open) {
-      fetch('http://localhost/silvercel_inventory_system/backend/api/sales_report.php?preview=true')
+      fetch(`${API_BASE_URL}/sales_report.php?preview=true`)
         .then(response => response.json())
         .then(data => {
           setReportData(data);
@@ -69,7 +70,7 @@ export default function SalesReportPreview({ open, onOpenChange }) {
   const handleDownload = () => {
     const yearQuery = selectedYear ? `years[]=${selectedYear}` : 'years[]=all';
     const orderIdsQuery = selectedRows.map(id => `order_ids[]=${id}`).join('&');
-    window.location.href = `http://localhost/silvercel_inventory_system/backend/api/sales_report.php?${yearQuery}&${orderIdsQuery}`;
+    window.location.href = `${API_BASE_URL}/sales_report.php?${yearQuery}&${orderIdsQuery}`;
   };
 
   const handleSelectAll = (checked) => {

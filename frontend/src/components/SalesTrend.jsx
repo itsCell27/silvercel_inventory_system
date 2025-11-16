@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { API_BASE_URL } from '@/config';
 
 export default function SalesTrend() {
     const [salesTrend, setSalesTrend] = useState([]);
 
     const fetchSalesTrend = () => {
-        fetch('http://localhost/silvercel_inventory_system/backend/api/salestrend.php')
+        fetch(`${API_BASE_URL}/salestrend.php`)
             .then(response => response.json())
             .then(data => setSalesTrend(data))
             .catch(error => console.error("Error fetching sales trend:", error));

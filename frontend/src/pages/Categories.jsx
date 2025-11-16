@@ -23,6 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import BackToTopButton from "@/components/BackToTopButton";
+import { API_BASE_URL } from "@/config";
 
 function AddEditCategoryDialog({ isOpen, onOpenChange, onSave, editCategory }) {
   const [categoryName, setCategoryName] = useState("");
@@ -99,7 +100,7 @@ export default function Categories() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const fetchCategories = () => {
-    fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php")
+    fetch(`${API_BASE_URL}/categories.php`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -126,7 +127,7 @@ export default function Categories() {
   }, []);
 
   const handleAddCategory = (name) => {
-    fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php", {
+    fetch(`${API_BASE_URL}/categories.php`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +143,7 @@ export default function Categories() {
 
   const handleEditCategory = (name) => {
     if (editCategory) {
-      fetch("http://localhost/silvercel_inventory_system/backend/api/categories.php", {
+      fetch(`${API_BASE_URL}/categories.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -162,7 +163,7 @@ export default function Categories() {
     if (selectedCategories.length === 0) return;
 
     const deletePromises = selectedCategories.map(id =>
-      fetch(`http://localhost/silvercel_inventory_system/backend/api/categories.php?id=${id}`, {
+      fetch(`${API_BASE_URL}/categories.php?id=${id}`, {
         method: "DELETE",
       })
     );

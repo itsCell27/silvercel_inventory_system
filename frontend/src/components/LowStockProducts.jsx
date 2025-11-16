@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
+import { API_BASE_URL } from '@/config';
 
 const LowStockProducts = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +9,7 @@ const LowStockProducts = () => {
   useEffect(() => {
     const fetchLowStockProducts = async () => {
       try {
-        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/lowstock.php');
+        const response = await fetch(`${API_BASE_URL}/lowstock.php`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE_URL } from '@/config';
 
 const Sales = () => {
     const [sales, setSales] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php')
+        fetch(`${API_BASE_URL}/sales_orders.php`)
             .then(response => response.json())
             .then(data => setSales(data));
     }, []);

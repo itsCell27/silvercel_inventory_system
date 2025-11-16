@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { API_BASE_URL } from '@/config';
 
 const BestSellingProducts = () => {
   const [products, setProducts] = useState([]);
@@ -7,7 +8,7 @@ const BestSellingProducts = () => {
   useEffect(() => {
     const fetchBestSellingProducts = async () => {
       try {
-        const response = await fetch('http://localhost/silvercel_inventory_system/backend/api/bestsellers.php');
+        const response = await fetch(`${API_BASE_URL}/bestsellers.php`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

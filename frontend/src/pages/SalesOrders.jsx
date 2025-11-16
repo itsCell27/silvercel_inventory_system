@@ -25,6 +25,7 @@ import ProductSelectionDialog from "@/components/sales_orders/ProductSelectionDi
 import { toast } from "sonner";
 import BackToTopButton from "@/components/BackToTopButton";
 import SalesReportPreview from "@/components/sales_orders/SalesReportPreview"
+import { API_BASE_URL } from '@/config';
 
 export default function SalesOrders() {
   const [orders, setOrders] = useState([])
@@ -50,12 +51,12 @@ export default function SalesOrders() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   useEffect(() => {
-    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php')
+    fetch(`${API_BASE_URL}/sales_orders.php`)
         .then(response => response.json())
         .then(data => setOrders(data))
         .catch(error => console.error("Error fetching sales orders:", error));
 
-    fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+    fetch(`${API_BASE_URL}/products.php`)
         .then(response => response.json())
         .then(data => setProducts(data))
         .catch(error => console.error("Error fetching products:", error));
@@ -86,7 +87,7 @@ export default function SalesOrders() {
       order_date: orderDate ? format(orderDate, "yyyy-MM-dd HH:mm:ss") : new Date().toISOString().slice(0, 19).replace('T', ' '),
     }
 
-    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
+    fetch(`${API_BASE_URL}/sales_orders.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export default function SalesOrders() {
             setOrders([data, ...orders]);
             toast.success("Order added successfully");
             // Refresh products list to get updated quantity
-            fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+            fetch(`${API_BASE_URL}/products.php`)
                 .then(response => response.json())
                 .then(data => setProducts(data))
                 .catch(error => console.error("Error fetching products:", error));
@@ -179,7 +180,7 @@ export default function SalesOrders() {
       order_date: updatedOrderDate
     };
 
-    fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php', {
+    fetch(`${API_BASE_URL}/sales_orders.php`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -196,7 +197,7 @@ export default function SalesOrders() {
           )
           setIsEditDialogOpen(false)
           toast.success("Order updated successfully")
-          fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
+          fetch(`${API_BASE_URL}/products.php`)
               .then(response => response.json())
               .then(data => setProducts(data))
               .catch(error => console.error("Error fetching products:", error));
@@ -219,7 +220,7 @@ export default function SalesOrders() {
     if (!selectedOrder) return;
 
     fetch(
-      `http://localhost/silvercel_inventory_system/backend/api/sales_orders.php?id=${selectedOrder.id}`,
+      `${API_BASE_URL}/sales_orders.php?id=${selectedOrder.id}`,
       {
         method: "DELETE",
       }
@@ -231,7 +232,7 @@ export default function SalesOrders() {
           toast.success("Order deleted successfully and stock restored");
           // Refresh products list to get updated quantity
           fetch(
-            "http://localhost/silvercel_inventory_system/backend/api/products.php"
+            `${API_BASE_URL}/products.php`
           )
             .then((response) => response.json())
             .then((data) => setProducts(data))

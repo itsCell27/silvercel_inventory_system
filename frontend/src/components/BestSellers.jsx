@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { API_BASE_URL } from '@/config';
 
 export default function BestSellers() {
     const [bestsellers, setBestsellers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost/silvercel_inventory_system/backend/api/bestsellers.php')
+        fetch(`${API_BASE_URL}/bestsellers.php`)
             .then(response => response.json())
             .then(data => setBestsellers(data))
             .catch(error => console.error("Error fetching bestsellers:", error));
