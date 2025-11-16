@@ -60,7 +60,7 @@ const chartConfig = {
   },
   items_sold: {
     label: "Items Sold",
-    color: "#f00001",
+    color: "var(--destructive)",
   },
 }
 
