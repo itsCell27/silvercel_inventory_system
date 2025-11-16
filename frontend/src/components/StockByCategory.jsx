@@ -59,6 +59,11 @@ export default function StockByCategory() {
           getComputedStyle(document.documentElement).getPropertyValue("--chart-3").trim(),
           getComputedStyle(document.documentElement).getPropertyValue("--chart-4").trim(),
           getComputedStyle(document.documentElement).getPropertyValue("--chart-5").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-6").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-7").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-8").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-9").trim(),
+          getComputedStyle(document.documentElement).getPropertyValue("--chart-10").trim(),
         ];
 
         const newChartData = data.map((item, index) => ({

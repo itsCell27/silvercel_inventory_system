@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,11 +19,12 @@ import {
 } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
 import { ShoppingCart, Package, Search, Pencil, Trash2, Calendar as CalendarIcon, Clock, Download } from "lucide-react"
-import { toast } from "sonner"
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar" // shadcn Calendar
 import ProductSelectionDialog from "@/components/sales_orders/ProductSelectionDialog"
+import { toast } from "sonner";
 import BackToTopButton from "@/components/BackToTopButton";
+import SalesReportPreview from "@/components/sales_orders/SalesReportPreview"
 
 export default function SalesOrders() {
   const [orders, setOrders] = useState([])
@@ -44,6 +46,8 @@ export default function SalesOrders() {
   const [editOrderTime, setEditOrderTime] = useState("00:00")
 
   const [isDateTimePopoverOpen, setIsDateTimePopoverOpen] = useState(false)
+  const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost/silvercel_inventory_system/backend/api/sales_orders.php')
@@ -206,20 +210,34 @@ export default function SalesOrders() {
       })
   }
 
-  const handleDelete = (id) => {
-    fetch(`http://localhost/silvercel_inventory_system/backend/api/sales_orders.php?id=${id}`, {
-      method: 'DELETE',
-    })
+  const handleDelete = (order) => {
+    setSelectedOrder(order);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirmation = () => {
+    if (!selectedOrder) return;
+
+    fetch(
+      `http://localhost/silvercel_inventory_system/backend/api/sales_orders.php?id=${selectedOrder.id}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.message.includes("successfully")) {
-          setOrders(orders.filter((order) => order.id !== id));
+          setOrders(orders.filter((order) => order.id !== selectedOrder.id));
           toast.success("Order deleted successfully and stock restored");
           // Refresh products list to get updated quantity
-          fetch('http://localhost/silvercel_inventory_system/backend/api/products.php')
-              .then(response => response.json())
-              .then(data => setProducts(data))
-              .catch(error => console.error("Error fetching products:", error));
+          fetch(
+            "http://localhost/silvercel_inventory_system/backend/api/products.php"
+          )
+            .then((response) => response.json())
+            .then((data) => setProducts(data))
+            .catch((error) =>
+              console.error("Error fetching products:", error)
+            );
         } else {
           toast.error(data.message || "Failed to delete order");
         }
@@ -227,6 +245,10 @@ export default function SalesOrders() {
       .catch((error) => {
         console.error("Error deleting order:", error);
         toast.error("Failed to delete order");
+      })
+      .finally(() => {
+        setIsDeleteDialogOpen(false)
+        setSelectedOrder(null)
       });
   };
 
@@ -237,7 +259,7 @@ export default function SalesOrders() {
         <h1 className="text-2xl font-semibold">Sales/Orders</h1>
         <Button 
           variant="outline"
-          onClick={() => window.location.href='http://localhost/silvercel_inventory_system/backend/api/sales_report.php'}>
+          onClick={() => setIsReportPreviewOpen(true)}>
           <Download className="h-4 w-4 mr-0 sm:mr-1" />
           <span className="hidden sm:block">Download Report</span>
         </Button>
@@ -438,7 +460,29 @@ export default function SalesOrders() {
         </CardContent>
       </Card>
 
-      {/* Orders Table Card */}
+      {/* Sales Report Preview Dialog */}
+      <SalesReportPreview 
+        open={isReportPreviewOpen} 
+        onOpenChange={setIsReportPreviewOpen} 
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This will permanently delete the order for "{selectedOrder?.product_name}". This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDeleteConfirmation}>Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Orders Table */}
       <Card>
         <CardHeader>
           <CardTitle>Sales Orders History</CardTitle>
@@ -451,9 +495,6 @@ export default function SalesOrders() {
                 <tr className="bg-muted/50">
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                     No.
-                  </th>
-                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-[100px]">
-                    Sales ID
                   </th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-[200px]">
                     Product Name
@@ -480,39 +521,59 @@ export default function SalesOrders() {
                     </td>
                   </tr>
                 ) : (
-                  orders.map((order, index) => {
+                    (() => {
+                      const groupedOrders = orders.reduce((acc, order) => {
+                        const year = new Date(order.order_date).getFullYear();
+                        if (!acc[year]) {
+                          acc[year] = [];
+                        }
+                        acc[year].push(order);
+                        return acc;
+                      }, {});
 
-                      const order_number = index + 1
+                      const sortedYears = Object.keys(groupedOrders).sort((a, b) => b - a);
 
-                      // {orders.length - index}
-                    
-                      return (
-                        <tr
-                        key={order.id}
-                        className="border-b border-border transition-colors hover:bg-muted/50"
-                        >
-                          <td className="p-4 align-middle font-medium">{order_number}</td>
-                          <td className="p-4 align-middle font-medium">{order.sales_id}</td>
-                          <td className="p-4 align-middle">{order.product_name}</td>
-                          <td className="p-4 align-middle">{order.quantity_sold}</td>
-                          <td className="p-4 align-middle font-semibold text-primary">
-                            ₱{parseFloat(order.total_price).toFixed(2)}
-                          </td>
-                          <td className="p-4 align-middle text-muted-foreground text-xs sm:text-sm">
-                            {new Date(order.order_date).toLocaleString()}
-                          </td>
-                          <td className="p-4 align-middle flex">
-                            <Button variant="ghost" size="icon" onClick={() => handleEditClick(order)}>
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDelete(order.id)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </td>
-                        </tr>
-                      )
-                  })
-                )}
+                      return sortedYears.flatMap(year => {
+                        const yearHeader = (
+                          <tr key={`year-${year}`} className="bg-muted/80">
+                            <td colSpan={6} className="p-2 text-center font-semibold">
+                              {year}
+                            </td>
+                          </tr>
+                        );
+
+                        const yearOrders = groupedOrders[year].map((order, index) => {
+                          const order_number = index + 1;
+                          return (
+                            <tr
+                              key={order.id}
+                              className="border-b border-border transition-colors hover:bg-muted/50"
+                            >
+                              <td className="p-4 align-middle font-medium">{order_number}</td>
+                              <td className="p-4 align-middle">{order.product_name}</td>
+                              <td className="p-4 align-middle">{order.quantity_sold}</td>
+                              <td className="p-4 align-middle font-semibold text-primary">
+                                ₱{parseFloat(order.total_price).toFixed(2)}
+                              </td>
+                              <td className="p-4 align-middle text-muted-foreground text-xs sm:text-sm">
+                                {new Date(order.order_date).toLocaleString()}
+                              </td>
+                              <td className="p-4 align-middle flex">
+                                <Button variant="ghost" size="icon" onClick={() => handleEditClick(order)}>
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" onClick={() => handleDelete(order)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        });
+
+                        return [yearHeader, ...yearOrders];
+                      });
+                    })()
+                  )}
               </tbody>
             </table>
           </div>
@@ -531,7 +592,7 @@ export default function SalesOrders() {
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle className="text-sm md:text-xl">Edit Sale #{selectedOrder.sales_id}</DialogTitle>
+                  <DialogTitle className="text-sm md:text-xl">Edit Sale</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
