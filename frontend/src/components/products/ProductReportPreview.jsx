@@ -30,59 +30,54 @@ export default function ProductReportPreview({ open, onOpenChange }) {
   const [reportData, setReportData] = useState([]);
   const [filteredReportData, setFilteredReportData] = useState([]);
   const [availableCategories, setAvailableCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
     if (open) {
       fetch(`${API_BASE_URL}/products.php`)
         .then(response => response.json())
         .then(data => {
-          setReportData(data);
-          setFilteredReportData(data);
-          const categories = [...new Set(data.map(item => item.category))];
-          setAvailableCategories(categories);
-          setSelectedCategory("all");
-          setSelectedRows(data.map(row => row.id));
+          if (Array.isArray(data)) {
+            const productsWithNumericPrices = data.map(product => ({
+                ...product,
+                price: parseFloat(product.price)
+            }));
+            setReportData(productsWithNumericPrices);
+            setFilteredReportData(productsWithNumericPrices);
+            const categories = [...new Set(data.map(item => item.category))];
+            setAvailableCategories(categories);
+            setSelectedRows(data.map(row => row.id));
+          } else {
+            console.error("Fetched data is not an array:", data);
+            setReportData([]);
+          }
         })
         .catch(error => console.error("Error fetching products preview:", error));
     }
   }, [open]);
 
   useEffect(() => {
-    if (selectedCategory && selectedCategory !== "all") {
-      const filteredData = reportData.filter(item => item.category === selectedCategory);
-      setFilteredReportData(filteredData);
+    let newFilteredData;
+    if (selectedCategory === "all") {
+      newFilteredData = reportData;
     } else {
-      setFilteredReportData(reportData);
+      newFilteredData = reportData.filter(item => item.category === selectedCategory);
     }
+    setFilteredReportData(newFilteredData);
+    setSelectedRows(newFilteredData.map(row => row.id));
   }, [selectedCategory, reportData]);
 
-  useEffect(() => {
-      fetch(`${API_BASE_URL}/categories.php`)
-          .then(response => response.json())
-          .then(data => setCategories(data));
-  
-      const categoryString = selectedCategories.length > 0 ? selectedCategories.join(',') : 'all';
-      fetch(`${API_BASE_URL}/products.php?category=${categoryString}`)
-          .then(response => response.json())
-          .then(data => setProducts(data));
-  }, [selectedCategories]);
-
   const handleCategoryChange = (category) => {
-    setSelectedCategories(prev => 
-        prev.includes(category) 
-            ? prev.filter(c => c !== category) 
-            : [...prev, category]
-    );
+    setSelectedCategory(category);
   };
 
   const handleDownload = () => {
-        const categoryString = selectedCategories.join(',');
-        const url = `${API_BASE_URL}/download_products.php?categories=${categoryString}`;
-        window.location.href = url;
-    };
+    const productIds = selectedRows.join(',');
+    const category = selectedCategory;
+    const url = `${API_BASE_URL}/product_report.php?category=${category}&product_ids=${productIds}`;
+    window.location.href = url;
+  };
   const handleSelectAll = (checked) => {
     if (checked) {
       setSelectedRows(filteredReportData.map(row => row.id));
@@ -105,12 +100,12 @@ export default function ProductReportPreview({ open, onOpenChange }) {
         <DialogHeader>
           <DialogTitle>Product Report Preview</DialogTitle>
           <DialogDescription>
-            This is a preview of the product report. You can download the full report in Excel format.
+            Select products and filter by category before downloading the report.
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end">
           <div className="flex items-center space-x-2">
-            <Select onValueChange={(value) => handleCategoryChange(value)} defaultValue={selectedCategory}>
+            <Select onValueChange={handleCategoryChange} value={selectedCategory}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select Category" />
             </SelectTrigger>
@@ -155,7 +150,7 @@ export default function ProductReportPreview({ open, onOpenChange }) {
                   <TableCell className="whitespace-normal">{row.name}</TableCell>
                   <TableCell>{row.category}</TableCell>
                   <TableCell>{row.quantity}</TableCell>
-                  <TableCell>{row.price}</TableCell>
+                  <TableCell>₱{row.price.toFixed(2)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

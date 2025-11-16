@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Search, Edit, Trash2 } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Download } from "lucide-react"
 import { toast } from "sonner"
 import Fuse from "fuse.js"
 import BackToTopButton from "@/components/BackToTopButton";
@@ -80,44 +80,17 @@ const initialProducts = [
 ];
 
 // SearchBar Component
-function SearchBar({ searchQuery, onSearchChange, category, onCategoryChange, categories }) {
+function SearchBar({ searchQuery, onSearchChange }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-3">
-      {/* Search Input */}
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Search by product name or category..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10 rounded-lg text-xs sm:text-sm"
-        />
-      </div>
-
-      {/* Category Select */}
-      <Select
-        value={category || ""}
-        onValueChange={(val) => onCategoryChange(val)}
-      >
-        <SelectTrigger className="w-40 sm:w-48">
-          <SelectValue placeholder="Category" />
-        </SelectTrigger>
-        <SelectContent>
-          {/* All Categories Option */}
-          <SelectItem value="all">All Categories</SelectItem>
-
-          {/* Divider for clarity */}
-          <div className="border-t border-border my-1"></div>
-
-          {/* Dynamic categories */}
-          {categories.map((cat) => (
-            <SelectItem key={cat} value={cat}>
-              {cat}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="relative flex-1">
+      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        type="text"
+        placeholder="Search by product name..."
+        value={searchQuery}
+        onChange={(e) => onSearchChange(e.target.value)}
+        className="pl-10 rounded-lg text-xs sm:text-sm"
+      />
     </div>
   );
 }
@@ -148,7 +121,7 @@ function ProductCard({ product, onEdit, onDelete }) {
             variant="outline"
             size="sm"
             className="flex-1"
-            onClick={() => onEdit(product)}
+            onClick={(e) => { e.stopPropagation(); onEdit(product); }}
           >
             <Edit className="h-4 w-4 mr-1" />
             Edit
@@ -157,7 +130,7 @@ function ProductCard({ product, onEdit, onDelete }) {
             variant="destructive"
             size="sm"
             className="flex-1"
-            onClick={() => onDelete(product)}
+            onClick={(e) => { e.stopPropagation(); onDelete(product); }}
           >
             <Trash2 className="h-4 w-4 mr-1" />
             Delete
@@ -335,6 +308,8 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
   )
 }
 
+import ProductReportPreview from "@/components/products/ProductReportPreview";
+
 // Main Products Component
 export default function Products() {
     const [products, setProducts] = useState([]);
@@ -344,6 +319,7 @@ export default function Products() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editProduct, setEditProduct] = useState(null);
     const [deleteProduct, setDeleteProduct] = useState(null);
+    const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false);
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/products.php`)
@@ -492,25 +468,47 @@ export default function Products() {
         setIsDialogOpen(true);
     };
 
+    const handleDownload = () => {
+        setIsReportPreviewOpen(true);
+    };
+
     return (
         <div className="w-full flex flex-col gap-6 mt-2 sm:mt-0">
             {/* Header */}
             <div className="flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-semibold">Products</h1>
-                <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto text-white">
-                    <Plus className="h-4 w-4" />
-                    Add Product
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button onClick={openAddDialog} className="gap-2 w-fit sm:w-auto text-white">
+                        <Plus className="h-4 w-4" />
+                        <span>Add New</span>
+                    </Button>
+                    <Button variant="outline" onClick={handleDownload}>
+                        <Download className="h-4 w-4 mr-2" />
+                        <span>Download</span>
+                    </Button>
+                </div>
             </div>
 
-            {/* Search Bar (now with category prop and handler) */}
-            <SearchBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                category={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-                categories={categories}
-            />
+            {/* Search and Filter */}
+            <div className="flex items-center justify-between gap-4">
+                <SearchBar
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                />
+                <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value === "all" ? "" : value)}>
+                    <SelectTrigger className="w-full sm:w-48">
+                        <SelectValue placeholder="Filter by Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
 
             {/* Products Grid */}
             {searchResults.length > 0 ? (
@@ -558,6 +556,12 @@ export default function Products() {
                 </AlertDialogContent>
             </AlertDialog>
 
+            <ProductReportPreview 
+                open={isReportPreviewOpen}
+                onOpenChange={setIsReportPreviewOpen}
+            />
+
+            {/* Back to Top Button */}
             <BackToTopButton />
         </div>
     );
