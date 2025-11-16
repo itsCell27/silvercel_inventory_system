@@ -496,6 +496,9 @@ export default function SalesOrders() {
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                     No.
                   </th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                    Sales ID
+                  </th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground min-w-[200px]">
                     Product Name
                   </th>
@@ -550,6 +553,7 @@ export default function SalesOrders() {
                               className="border-b border-border transition-colors hover:bg-muted/50"
                             >
                               <td className="p-4 align-middle font-medium">{order_number}</td>
+                              <td className="p-4 align-middle">{order.sales_id}</td>
                               <td className="p-4 align-middle">{order.product_name}</td>
                               <td className="p-4 align-middle">{order.quantity_sold}</td>
                               <td className="p-4 align-middle font-semibold text-primary">
