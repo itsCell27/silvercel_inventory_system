@@ -157,7 +157,7 @@ export default function ProductReportPreview({ open, onOpenChange }) {
           </Table>
         </div>
         <div className="flex justify-end mt-4">
-          <Button onClick={handleDownload}>
+          <Button onClick={handleDownload} disabled={selectedRows.length === 0}>
             <Download className="h-4 w-4 mr-2" />
             Download Report
           </Button>

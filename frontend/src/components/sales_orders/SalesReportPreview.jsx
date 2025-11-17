@@ -212,7 +212,10 @@ export default function SalesReportPreview({ open, onOpenChange }) {
           </Table>
         </div>
         <div className="flex justify-end mt-4">
-          <Button onClick={handleDownload} disabled={!loading}>
+          <Button 
+            onClick={handleDownload} 
+            disabled={!loading || selectedRows.length === 0}
+          >
             {!loading ? <Spinner /> : <Download className="h-4 w-4 mr-2" />}
             Download Report
           </Button>
