@@ -26,6 +26,7 @@ import { Plus, Search, Edit, Trash2, Download } from "lucide-react"
 import { toast } from "sonner"
 import Fuse from "fuse.js"
 import BackToTopButton from "@/components/BackToTopButton";
+import SearchBar from "@/components/SearchBar"
 import { API_BASE_URL } from '@/config';
 
 const initialProducts = [
@@ -80,20 +81,20 @@ const initialProducts = [
 ];
 
 // SearchBar Component
-function SearchBar({ searchQuery, onSearchChange }) {
-  return (
-    <div className="relative flex-1">
-      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-      <Input
-        type="text"
-        placeholder="Search by product name..."
-        value={searchQuery}
-        onChange={(e) => onSearchChange(e.target.value)}
-        className="pl-10 rounded-lg text-xs sm:text-sm"
-      />
-    </div>
-  );
-}
+// function SearchBar({ searchQuery, onSearchChange }) {
+//   return (
+//     <div className="relative flex-1">
+//       <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+//       <Input
+//         type="text"
+//         placeholder="Search by product name..."
+//         value={searchQuery}
+//         onChange={(e) => onSearchChange(e.target.value)}
+//         className="pl-10 rounded-lg text-xs sm:text-sm"
+//       />
+//     </div>
+//   );
+// }
 
 
 // ProductCard Component (unchanged)
@@ -523,8 +524,10 @@ export default function Products() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-12">
-                    <p className="text-muted-foreground text-lg">No products found matching "{searchQuery}"</p>
+                <div className="text-center py-12 w-full">
+                    <p className="text-muted-foreground text-lg text-wrap">
+                      {searchQuery === "" ? "No products found." : `No products found matching "${searchQuery}"`}
+                    </p>
                 </div>
             )}
 
