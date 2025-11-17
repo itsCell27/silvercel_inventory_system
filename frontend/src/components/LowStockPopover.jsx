@@ -5,6 +5,7 @@ import { Bell, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import { API_BASE_URL } from '@/config';
+import { Separator } from '@/components/ui/separator';
 
 const LowStockPopover = () => {
   const [lowStockItems, setLowStockItems] = useState([]);
@@ -22,6 +23,12 @@ const LowStockPopover = () => {
     fetchLowStockItems();
   }, []);
 
+  const getStockStatus = (stock) => {
+    if (stock <= 5) return 'text-destructive';
+    if (stock <= 10) return 'text-yellow-600 dark:text-yellow-500';
+    return 'text-muted-foreground';
+  };
+
   return (
     <Popover>
       {/* Bell icon with notification badge */}
@@ -36,7 +43,7 @@ const LowStockPopover = () => {
 
       {/* Popover content */}
       <PopoverContent className="w-64 p-4" sideOffset={10} sside="bottom" align="end">
-        <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+        <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-destructive" />
           Low Stock Alerts
         </h3>
@@ -44,17 +51,28 @@ const LowStockPopover = () => {
         {lowStockItems.length === 0 ? (
           <p className="text-sm text-muted-foreground">All stocks are sufficient</p>
         ) : (
-          <ul className="space-y-2 max-h-[40vh] sm:max-h-48 overflow-y-auto">
+          /* Note: added pr-3 to reserve space for the scrollbar and scrollbarGutter to ensure stable layout */
+          <ul
+            className="space-y-2 max-h-[40vh] sm:max-h-48 overflow-y-auto pr-3"
+            style={{ scrollbarGutter: 'stable' }}
+          >
             {lowStockItems.map((item, index) => (
-              <li
-                key={index}
-                className="flex justify-center items-center py-1 gap-3"
-              >
-                <span className="text-sm font-medium truncate text-wrap">{item.name}</span>
-                <span className="text-xs font-semibold text-destructive flex-1 text-nowrap">
-                  {item.quantity} left
-                </span>
-              </li>
+              <>
+                <li
+                  key={index}
+                  className="flex items-start justify-between py-1 gap-3"
+                >
+                  <span className="text-sm font-medium flex-1 pr-3 text-wrap">
+                    {item.name}
+                  </span>
+
+                  <span className={`text-xs font-semibold ${getStockStatus(item.quantity)} whitespace-nowrap`}>
+                    {item.quantity} left
+                  </span>
+                </li>
+
+                <Separator className="my-4" />
+              </>
             ))}
           </ul>
         )}
