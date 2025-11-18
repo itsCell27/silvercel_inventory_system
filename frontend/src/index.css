@@ -368,33 +368,49 @@
 
 /* pink – SOFT ROSE THEME */
 :root[data-color-theme="pink"] {
-  /* 🌞 Light Mode — softer rose, low-saturation */
-  --background: oklch(0.985 0.01 350);
-  --foreground: oklch(0.22 0.02 350);
+  --radius: 0.65rem;
 
-  --card: oklch(0.99 0.008 350);
-  --card-foreground: oklch(0.22 0.02 350);
+  /* SUPER bright rose background (like red theme's white bg) */
+  --background: oklch(1 0 350);
+  --foreground: oklch(0.20 0.03 350);
 
-  --popover: oklch(0.99 0.008 350);
-  --popover-foreground: oklch(0.22 0.02 350);
+  --card: oklch(1 0 350);
+  --card-foreground: oklch(0.20 0.03 350);
 
-  /* Soft rose primary */
-  --primary: oklch(0.78 0.12 350);
-  --primary-foreground: oklch(0.15 0.015 350);
+  --popover: oklch(1 0 350);
+  --popover-foreground: oklch(0.20 0.03 350);
 
-  --secondary: oklch(0.94 0.03 350);
+  /* Strong primary pink (similar structure to red primary) */
+  --primary: oklch(0.70 0.23 350);
+  --primary-foreground: oklch(0.98 0.02 350);
+
+  /* Pastel pink for secondary/neutral */
+  --secondary: oklch(0.965 0.02 350);
   --secondary-foreground: oklch(0.28 0.02 350);
 
-  --muted: oklch(0.95 0.025 350);
-  --muted-foreground: oklch(0.45 0.035 350);
+  --muted: oklch(0.965 0.02 350);
+  --muted-foreground: oklch(0.55 0.025 350);
 
-  --accent: oklch(0.9 0.035 350);
-  --accent-foreground: oklch(0.22 0.02 350);
+  --accent: oklch(0.965 0.02 350);
+  --accent-foreground: oklch(0.28 0.02 350);
 
-  --destructive: oklch(0.63 0.15 20);
+  /* Soft pink border */
   --border: oklch(0.92 0.015 350);
   --input: oklch(0.92 0.015 350);
   --ring: var(--primary);
+
+  /* Destructive stays red-based */
+  --destructive: oklch(0.60 0.20 25);
+
+  /* Sidebar */
+  --sidebar: oklch(0.99 0 350);
+  --sidebar-foreground: oklch(0.20 0.03 350);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--primary);
 
   /* 🎨 Charts (NOT PINK) — ShadCN neutral multi-color */
   --chart-1: oklch(0.55 0.15 255); /* blue */
@@ -402,45 +418,51 @@
   --chart-3: oklch(0.83 0.18 95);  /* yellow */
   --chart-4: oklch(0.75 0.18 55);  /* orange */
   --chart-5: oklch(0.63 0.20 25);  /* red */
-
-  /* Sidebar */
-  --sidebar: oklch(0.985 0.01 350);
-  --sidebar-foreground: oklch(0.22 0.02 350);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--secondary);
-  --sidebar-accent-foreground: var(--secondary-foreground);
-  --sidebar-border: oklch(0.92 0.015 350);
-  --sidebar-ring: var(--primary);
 }
 
 /* 🌚 DARK MODE — soft rose-taupe */
 .dark[data-color-theme="pink"] {
-  --background: oklch(0.18 0.015 345);
-  --foreground: oklch(0.97 0.01 350);
+  /* Deep rose-gray background (like red’s deep background) */
+  --background: oklch(0.20 0.02 350);
+  --foreground: oklch(0.99 0.01 350);
 
-  --card: oklch(0.22 0.015 345);
-  --card-foreground: oklch(0.97 0.01 350);
+  --card: oklch(0.23 0.02 350);
+  --card-foreground: oklch(0.99 0.01 350);
 
-  --popover: oklch(0.24 0.015 345);
-  --popover-foreground: oklch(0.97 0.01 350);
+  --popover: oklch(0.23 0.02 350);
+  --popover-foreground: oklch(0.99 0.01 350);
 
-  --primary: oklch(0.7 0.10 350);
-  --primary-foreground: oklch(0.16 0.015 350);
+  /* Stronger, brighter primary pink */
+  --primary: oklch(0.67 0.25 350);
+  --primary-foreground: oklch(0.98 0.02 350);
 
-  --secondary: oklch(0.3 0.02 350);
-  --secondary-foreground: oklch(0.97 0.01 350);
+  /* Darker secondary tones */
+  --secondary: oklch(0.30 0.02 350);
+  --secondary-foreground: oklch(0.99 0.01 350);
 
-  --muted: oklch(0.28 0.018 350);
-  --muted-foreground: oklch(0.75 0.04 350);
+  /* Muted rose-gray */
+  --muted: oklch(0.30 0.02 350);
+  --muted-foreground: oklch(0.78 0.05 350);
 
-  --accent: oklch(0.38 0.045 345);
-  --accent-foreground: oklch(0.97 0.01 350);
+  --accent: oklch(0.30 0.02 350);
+  --accent-foreground: oklch(0.99 0.01 350);
 
-  --destructive: oklch(0.58 0.13 25);
+  /* Destructive red stays unchanged */
+  --destructive: oklch(0.60 0.20 25);
+
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: var(--primary);
+  --ring: oklch(0.40 0.12 350);
+
+  /* Sidebar in dark mode */
+  --sidebar: oklch(0.23 0.02 350);
+  --sidebar-foreground: oklch(0.99 0.01 350);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--primary);
 
   /* 🎨 Charts (STILL NOT PINK) */
   --chart-1: oklch(0.65 0.15 255); /* blue */
@@ -448,16 +470,6 @@
   --chart-3: oklch(0.78 0.17 95);  /* yellow */
   --chart-4: oklch(0.67 0.16 55);  /* orange */
   --chart-5: oklch(0.58 0.17 25);  /* red */
-
-  /* Sidebar */
-  --sidebar: oklch(0.22 0.015 345);
-  --sidebar-foreground: oklch(0.97 0.01 350);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--muted);
-  --sidebar-accent-foreground: var(--foreground);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: var(--primary);
 }
 
 /* red */
