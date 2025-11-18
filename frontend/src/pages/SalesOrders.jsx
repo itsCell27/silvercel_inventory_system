@@ -694,8 +694,9 @@ export default function SalesOrders() {
                   </div>
                     {product && (
                       <div className="grid grid-cols-4 items-center gap-4">
-                        <div className="col-start-2 col-span-3 text-sm text-muted-foreground">
-                          Available stock: {maxAllowed}
+                        <div className="col-start-2 col-span-3 flex gap-1 text-sm text-muted-foreground text-wrap">
+                          Stock Available for Editing: 
+                          <p className="text-primary font-semibold">{maxAllowed}</p>
                         </div>
                       </div>
                     )}
