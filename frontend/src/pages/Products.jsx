@@ -142,7 +142,7 @@ function ProductCard({ product, onEdit, onDelete }) {
   )
 }
 
-// AddProductDialog Component (unchanged)
+// AddProductDialog Component (updated scrollbar UI)
 function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, editProduct, onEditProduct }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -223,7 +223,10 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto max-w-[95vw]">
+      {/* Note: added thin-scrollbar class, pr-3 to reserve space for scrollbar,
+          and inline styles for stable gutter + smooth touch scrolling */}
+      <DialogContent className="max-h-[90vh] overflow-y-auto max-w-[95vw] thin-scrollbar pr-3"
+                     style={{ scrollbarGutter: "stable", WebkitOverflowScrolling: "touch" }}>
         <DialogHeader>
           <DialogTitle>{editProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
           <DialogDescription>
@@ -304,6 +307,51 @@ function AddProductDialog({ isOpen, onOpenChange, onAddProduct, categories, edit
             </Button>
           </div>
         </div>
+
+        {/* Scoped scrollbar styles to match other dialogs:
+            - thicker thumb
+            - no hover change
+            - consistent look (WebKit + Firefox)
+        */}
+        <style>{`
+          .thin-scrollbar {
+            --scrollbar-thumb: rgba(255,255,255,0.18);
+            --scrollbar-track: transparent;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 4px solid transparent;
+            background-clip: padding-box;
+          }
+
+          /* ensure no hover effect */
+          .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: var(--scrollbar-thumb) !important;
+            opacity: 1 !important;
+            box-shadow: none !important;
+          }
+
+          .thin-scrollbar {
+            scrollbar-width: auto;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+          }
+
+          .thin-scrollbar.dragging {
+            cursor: grabbing;
+            user-select: none;
+          }
+        `}</style>
       </DialogContent>
     </Dialog>
   )
