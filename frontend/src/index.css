@@ -112,7 +112,7 @@
 }
 
 .dark {
-  /* 🌙 Dark Mode – Deeper, modern blue base */
+  /* Dark Mode – Deeper, modern blue base */
   --background: oklch(0.17 0.015 255); /* deep navy-gray */
   --foreground: oklch(0.96 0.01 260);  /* near white text */
 
@@ -305,7 +305,7 @@
   --input:  oklch(0.92 0.004 286.32);
   --ring:  oklch(0.841 0.238 128.85);
 
-  /* 🎨 HIGH-CONTRAST CHART COLORS */
+  /* HIGH-CONTRAST CHART COLORS */
   --chart-1: oklch(0.65 0.23 255); /* Strong Blue */
   --chart-2: oklch(0.72 0.19 45);  /* Orange */
   --chart-3: oklch(0.90 0.20 100); /* Bright Yellow */
@@ -348,7 +348,7 @@
   --input:  oklch(1 0 0 / 15%);
   --ring:  oklch(0.405 0.101 131.063);
 
-  /* 🎨 HIGH-CONTRAST CHART COLORS (dark mode) */
+  /* HIGH-CONTRAST CHART COLORS (dark mode) */
   --chart-1: oklch(0.75 0.23 255); /* Blue */
   --chart-2: oklch(0.68 0.21 45);  /* Orange */
   --chart-3: oklch(0.88 0.22 100); /* Yellow */
@@ -412,7 +412,7 @@
   --sidebar-border: var(--border);
   --sidebar-ring: var(--primary);
 
-  /* 🎨 Charts (NOT PINK) — ShadCN neutral multi-color */
+  /* Charts (NOT PINK) — ShadCN neutral multi-color */
   --chart-1: oklch(0.55 0.15 255); /* blue */
   --chart-2: oklch(0.62 0.15 145); /* green */
   --chart-3: oklch(0.83 0.18 95);  /* yellow */
@@ -420,7 +420,7 @@
   --chart-5: oklch(0.63 0.20 25);  /* red */
 }
 
-/* 🌚 DARK MODE — soft rose-taupe */
+/* DARK MODE — soft rose-taupe */
 .dark[data-color-theme="pink"] {
   /* Deep rose-gray background (like red’s deep background) */
   --background: oklch(0.20 0.02 350);
@@ -464,7 +464,7 @@
   --sidebar-border: var(--border);
   --sidebar-ring: var(--primary);
 
-  /* 🎨 Charts (STILL NOT PINK) */
+  /* Charts (STILL NOT PINK) */
   --chart-1: oklch(0.65 0.15 255); /* blue */
   --chart-2: oklch(0.54 0.13 145); /* green */
   --chart-3: oklch(0.78 0.17 95);  /* yellow */
@@ -496,7 +496,7 @@
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.704 0.191 22.216);
 
-  /* 🎨 HIGH-CONTRAST CHART COLORS (NEW ORDER) */
+  /* HIGH-CONTRAST CHART COLORS (NEW ORDER) */
   --chart-1: oklch(0.65 0.22 300); /* Purple */
   --chart-2: oklch(0.90 0.20 100); /* Yellow */
   --chart-3: oklch(0.70 0.23 255); /* Blue */
@@ -534,7 +534,7 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.396 0.141 25.723);
 
-  /* 🎨 HIGH-CONTRAST CHART COLORS (NEW ORDER — dark mode) */
+  /* HIGH-CONTRAST CHART COLORS (NEW ORDER — dark mode) */
   --chart-1: oklch(0.70 0.22 300); /* Purple */
   --chart-2: oklch(0.88 0.22 100); /* Yellow */
   --chart-3: oklch(0.75 0.23 255); /* Blue */
