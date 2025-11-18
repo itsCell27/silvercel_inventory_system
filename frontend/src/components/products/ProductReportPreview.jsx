@@ -95,8 +95,8 @@ export default function ProductReportPreview({ open, onOpenChange }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} className="min-w-[90vw] sm:min-w-[80vw] lg:min-w-[60vw]">
-      <DialogContent>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="min-w-[90vw]">
         <DialogHeader>
           <DialogTitle>Product Report Preview</DialogTitle>
           <DialogDescription>
@@ -120,7 +120,13 @@ export default function ProductReportPreview({ open, onOpenChange }) {
           </Select>
         </div>
         </div>
-        <div className="overflow-auto max-h-96">
+        <div
+          className="thin-scrollbar overflow-auto max-h-96 pr-3"
+          style={{
+            scrollbarGutter: "stable",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
           <Table>
             <TableHeader>
               <TableRow>
@@ -130,7 +136,7 @@ export default function ProductReportPreview({ open, onOpenChange }) {
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead>ID</TableHead>
+                <TableHead>No.</TableHead>
                 <TableHead>Product Name</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Quantity</TableHead>
@@ -157,11 +163,52 @@ export default function ProductReportPreview({ open, onOpenChange }) {
           </Table>
         </div>
         <div className="flex justify-end mt-4">
-          <Button onClick={handleDownload} disabled={selectedRows.length === 0}>
+          <Button onClick={handleDownload} disabled={selectedRows.length === 0} className="text-white">
             <Download className="h-4 w-4 mr-2" />
             Download Report
           </Button>
         </div>
+        <style>{`
+          /* Scrollbar variables */
+          .thin-scrollbar {
+            --scrollbar-thumb: rgba(255,255,255,0.18);  /* more visible thumb */
+            --scrollbar-track: transparent;
+          }
+
+          /* WebKit (Chrome, Edge, Safari) */
+          .thin-scrollbar::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 4px solid transparent;
+            background-clip: padding-box;
+          }
+
+          /* Remove hover effect completely */
+          .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: var(--scrollbar-thumb) !important;
+          }
+
+          /* Firefox scrollbar */
+          .thin-scrollbar {
+            scrollbar-width: auto;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+          }
+
+          /* Dragging cursor feedback */
+          .thin-scrollbar.dragging {
+            cursor: grabbing;
+            user-select: none;
+          }
+        `}</style>
       </DialogContent>
     </Dialog>
   );

@@ -53,8 +53,11 @@ const LowStockPopover = () => {
         ) : (
           /* Note: added pr-3 to reserve space for the scrollbar and scrollbarGutter to ensure stable layout */
           <ul
-            className="space-y-2 max-h-[40vh] sm:max-h-48 overflow-y-auto pr-3"
-            style={{ scrollbarGutter: 'stable' }}
+            className="thin-scrollbar space-y-2 max-h-[40vh] sm:max-h-48 overflow-y-auto pr-3"
+            style={{
+              scrollbarGutter: "stable",
+              WebkitOverflowScrolling: "touch",
+            }}
           >
             {lowStockItems.map((item, index) => (
               <>
@@ -90,6 +93,43 @@ const LowStockPopover = () => {
             </Button>
           </div>
         )} */}
+
+        <style>{`
+          .thin-scrollbar {
+            --scrollbar-thumb: rgba(255,255,255,0.18);
+            --scrollbar-track: transparent;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 4px solid transparent;
+            background-clip: padding-box;
+          }
+
+          .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: var(--scrollbar-thumb) !important;
+          }
+
+          .thin-scrollbar {
+            scrollbar-width: auto;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+          }
+
+          .thin-scrollbar.dragging {
+            cursor: grabbing;
+            user-select: none;
+          }
+        `}</style>
       </PopoverContent>
     </Popover>
   );
