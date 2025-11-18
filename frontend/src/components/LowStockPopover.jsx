@@ -5,10 +5,12 @@ import { Bell, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import { API_BASE_URL } from '@/config';
-import { Separator } from '@/components/ui/separator';
+import { useNavigate } from "react-router-dom";
 
 const LowStockPopover = () => {
   const [lowStockItems, setLowStockItems] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLowStockItems = async () => {
@@ -24,10 +26,18 @@ const LowStockPopover = () => {
   }, []);
 
   const getStockStatus = (stock) => {
+    if (stock <= 5) return 'bg-destructive';
+    if (stock <= 10) return 'bg-yellow-600 dark:bg-yellow-500';
+    return 'text-muted-foreground';
+  };
+
+  const getTextStockStatus = (stock) => {
     if (stock <= 5) return 'text-destructive';
     if (stock <= 10) return 'text-yellow-600 dark:text-yellow-500';
     return 'text-muted-foreground';
   };
+
+  
 
   return (
     <Popover>
@@ -60,22 +70,26 @@ const LowStockPopover = () => {
             }}
           >
             {lowStockItems.map((item, index) => (
-              <>
-                <li
-                  key={index}
-                  className="flex items-start justify-between py-1 gap-3"
-                >
-                  <span className="text-sm font-medium flex-1 pr-3 text-wrap">
-                    {item.name}
-                  </span>
+              <div
+                key={index}
+                className="rounded-xl hover:bg-accent/30 transition-colors duration-200 p-4"
+                onClick={() => navigate(`/app/products?productName=${item.name}`)}
+              >
+                <div className="flex items-start gap-3">
+                  {/* Dot using getStockStatus */}
+                  <div
+                    className={`mt-1 w-2 h-2 rounded-full ${getStockStatus(item.quantity)}`}
+                  />
 
-                  <span className={`text-xs font-semibold ${getStockStatus(item.quantity)} whitespace-nowrap`}>
-                    {item.quantity} left
-                  </span>
-                </li>
+                  {/* Text content */}
+                  <div className="flex-1">
 
-                <Separator className="my-4" />
-              </>
+                    <p className="text-sm text-muted-foreground leading-tight">
+                      {item.name} is running low <span className={`${getTextStockStatus(item.quantity)}`}>{item.quantity} units</span> left
+                    </p>
+                  </div>
+                </div>
+              </div>
             ))}
           </ul>
         )}

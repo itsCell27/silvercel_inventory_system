@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { API_BASE_URL } from '@/config';
+import { useNavigate } from "react-router-dom";
 
 export default function BestSellers() {
     const [bestsellers, setBestsellers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/bestsellers.php`)

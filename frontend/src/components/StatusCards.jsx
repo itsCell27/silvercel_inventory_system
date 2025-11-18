@@ -51,7 +51,7 @@ export default function StatusCards({ cards }) {
                 const Icon = card.icon;
 
                 return (
-                    <Card key={index} className="hover:shadow-md transition-shadow">
+                    <Card key={index} className="hover:shadow-[var(--shadow-md),0_4px_16px_var(--accent)] transition-shadow">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-md sm:text-base font-medium text-muted-foreground">{card.title}</CardTitle>
                         <card.icon className={`h-6 w-6 ${card.color}`} />

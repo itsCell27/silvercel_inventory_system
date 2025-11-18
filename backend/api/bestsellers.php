@@ -19,11 +19,11 @@ $sql = "
         totals.total_quantity_sold
     FROM products p
     JOIN (
-        SELECT product_name, SUM(quantity_sold) AS total_quantity_sold
+        SELECT product_id, SUM(quantity_sold) AS total_quantity_sold
         FROM sales_orders
-        GROUP BY product_name
+        GROUP BY product_id
     ) AS totals
-      ON totals.product_name = p.name
+      ON totals.product_id = p.id
     ORDER BY totals.total_quantity_sold DESC
     LIMIT 5
 ";

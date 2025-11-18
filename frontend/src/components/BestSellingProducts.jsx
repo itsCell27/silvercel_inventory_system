@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { API_BASE_URL } from '@/config';
+import { useNavigate } from "react-router-dom";
 
 const BestSellingProducts = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBestSellingProducts = async () => {
@@ -44,6 +46,7 @@ const BestSellingProducts = () => {
                 <div
                   key={product.id}
                   className="flex gap-4 items-center justify-between p-2 sm:p-3 md:p-4 rounded-lg bg-card hover:bg-accent/50 transition-colors duration-200"
+                  onClick={() => navigate(`/app/products?productName=${product.product_name}`)}
                 >
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
                     <div className="w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-muted flex items-center justify-center text-lg sm:text-xl md:text-2xl shrink-0">

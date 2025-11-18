@@ -27,6 +27,7 @@ import { toast } from "sonner"
 import Fuse from "fuse.js"
 import BackToTopButton from "@/components/BackToTopButton";
 import SearchBar from "@/components/SearchBar"
+import { useSearchParams } from "react-router-dom";
 import { API_BASE_URL } from '@/config';
 
 const initialProducts = [
@@ -100,7 +101,7 @@ const initialProducts = [
 // ProductCard Component (unchanged)
 function ProductCard({ product, onEdit, onDelete }) {
   return (
-    <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg py-0 pb-6">
+    <Card className="flex flex-col overflow-hidden transition-all hover:shadow-[var(--shadow-lg),0_4px_16px_var(--accent)] py-0 pb-6">
       <div className="relative aspect-square overflow-hidden bg-muted m-5 mb-0 rounded-md">
         <img
           src={product.image_path || "/placeholder.svg"}
@@ -370,6 +371,9 @@ export default function Products() {
     const [deleteProduct, setDeleteProduct] = useState(null);
     const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false);
 
+    const [searchParams] = useSearchParams();
+    const productName = searchParams.get("productName"); // <-- get query
+
     useEffect(() => {
         fetch(`${API_BASE_URL}/products.php`)
             .then(response => response.json())
@@ -431,6 +435,13 @@ export default function Products() {
         const results = fuse.search(query);
         return results.map((result) => result.item);
     }, [searchQuery, fuse, filteredByCategory]);
+
+    // apply productName from props into searchQuery
+    useEffect(() => {
+        if (productName) {
+            setSearchQuery(productName);
+        }
+    }, [productName]);
 
     const handleAddProduct = (newProductFormData) => {
         fetch(`${API_BASE_URL}/products.php`, {
